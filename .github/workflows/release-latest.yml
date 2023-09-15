@@ -1,18 +1,14 @@
 name: "upload latest image"
 
 on:
-  workflow_run:
-    workflows: [build]
-    types:
-      - completed
+  release:
+    types: [published]
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build-and-push-image:
-    if: github.ref == 'refs/head/main'
-    name: Build latest Docker Image and Push
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -20,17 +16,3 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Log in to the Container registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: latest
-          labels: openjdk-17
-          build_args: JDK_VERSION=17
