@@ -22,7 +22,7 @@ jobs:
   build:
     strategy:
       matrix:
-        version: [8, 11, 17]
+        version: [11, 17]
     name: Build Ubuntu - Java
     needs: lint
     runs-on: ubuntu-latest
