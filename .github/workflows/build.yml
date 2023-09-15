@@ -46,6 +46,17 @@ jobs:
         with:
           cli: 'latest'
 
+      - name: Cache clojure dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.m2/repository
+            ~/.gitlibs
+            ~/.deps.clj
+          key: cljdeps-${{ hashFiles('deps.edn', 'bb.edn') }}
+          restore-keys: cljdeps-
+
+
       - name: Install babashka
         uses: turtlequeue/setup-babashka@v1.5.0
         with:
