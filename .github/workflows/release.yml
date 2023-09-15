@@ -1,4 +1,4 @@
-name: "upload latest image"
+name: "build images for latest release"
 
 on:
   release:
