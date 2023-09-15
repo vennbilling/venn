@@ -1,4 +1,4 @@
-name: "build"
+name: "lint, build and test"
 
 on:
   push:
