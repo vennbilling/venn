@@ -84,6 +84,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: latest
+          tags: ghcr.io/${{ github.repository_owner }}/agent:latest
           labels: openjdk-17
-          build_args: JDK_VERSION=17
+          build-args: JDK_VERSION=17
