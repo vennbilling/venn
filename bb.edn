@@ -1,0 +1,14 @@
+{:tasks {:requires ([babashka.fs :as fs]
+                    [babashka.tasks :refer [shell]])
+
+         repl     {:doc  "starts a nREPL server"
+                   :task (clojure {:dir "."} "-M:dev:repl")}
+
+         clean     {:doc "cleans the project"
+                    :task (clojure {:dir "."} "-T:build clean")}
+
+         build     {:doc  "compiles the project"
+                    :task (clojure {:dir "."} "-T:build build")}
+
+         uberjar   {:doc  "builds the uberjar"
+                    :task (clojure {:dir "."} "-T:build all")}}}
