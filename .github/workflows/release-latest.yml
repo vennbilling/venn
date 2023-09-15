@@ -5,15 +5,13 @@ on:
     workflows: [build]
     types:
       - completed
-  push:
-    branches: [ main ]
-
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build-and-push-image:
+    if: github.ref == 'refs/head/main'
     name: Build latest Docker Image and Push
     runs-on: ubuntu-latest
     permissions:
