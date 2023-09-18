@@ -4,7 +4,8 @@
 
 (def lib 'venn-billing/agent)
 (def main-cls (string/join "." (filter some? [(namespace lib) (name lib) "core"])))
-(def version (format "0.0.1-alpha-SNAPSHOT"))
+(def jdk-version (or (System/getenv "JVM_VERSION") "17"))
+(def version (format "0.0.1-alpha-openjdk-%s-SNAPSHOT" jdk-version))
 (def target-dir "target")
 (def class-dir (str target-dir "/" "classes"))
 (def uber-file (format "%s/%s-standalone.jar" target-dir (name lib)))
@@ -26,7 +27,7 @@
                :target-dir class-dir}))
 
 (defn build [_]
-  (println "Compiling Clojure...")
+  (println (format "Compiling Clojure with jdk %s..." jdk-version))
   (b/compile-clj {:basis basis
                   :src-dirs ["src/clj"]
                   :class-dir class-dir}))

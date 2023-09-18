@@ -54,6 +54,8 @@ jobs:
           babashka-version: 1.3.182
 
       - name: Uberjar
+        env:
+          JDK_VERSION: ${{ matrix.version }}
         run: |
           bb uberjar
 
