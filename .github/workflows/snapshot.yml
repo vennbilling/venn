@@ -6,15 +6,9 @@ on:
     types: [published]
   push:
     branches: [ main ]
-  workflow_dispatch:
-    inputs:
-      name:
-        description: 'Run Name'
-        required: true
-        type: string
 
 jobs:
-  publish-jar:
+  build-and-publish-jar:
     runs-on: ubuntu-latest
     permissions:
       contents: read
