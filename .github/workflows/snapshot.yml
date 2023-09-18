@@ -1,4 +1,4 @@
-name: "publish snapshot artifacts"
+name: "snapshot"
 run-name: ${{ inputs.name }}
 
 on:
@@ -14,7 +14,7 @@ on:
         type: string
 
 jobs:
-  release-snapshot:
+  publish:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -55,12 +55,6 @@ jobs:
           JDK_VERSION: 17
         run: |
           bb uberjar
-
-      - name: Configure GitHub Packages
-        uses: actions/setup-java@v3
-        with:
-          java-version: ${{ matrix.version }}
-          distribution: 'zulu'
 
       - name: Publish package to GitHub Packages
         run: mvn -B clean deploy --file target/classes/META-INF/maven/io.github.venn-billing/agent/pom.xml
