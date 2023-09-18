@@ -51,7 +51,7 @@ jobs:
       - name: Install babashka
         uses: turtlequeue/setup-babashka@v1.5.2
         with:
-          babashka-version: "$BABASHKA_VERSION"
+          babashka-version: 1.3.182
 
       - name: Uberjar
         run: |
