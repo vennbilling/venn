@@ -1,9 +1,16 @@
-name: "build release artifacts"
+name: "publish artifacts"
+run-name: ${{ inputs.tag }}
 
 on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'GitHub Tab'
+        required: true
+        type: tag
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
@@ -67,6 +74,6 @@ jobs:
           server-id: ossrh
 
       - name: Publish to GitHub Packages
-        run: mvn --batch-mode deploy
+        # run: mvn --batch-mode deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
