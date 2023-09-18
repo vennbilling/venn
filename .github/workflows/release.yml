@@ -1,4 +1,4 @@
-name: "publish artifacts"
+name: "publish release artifacts"
 run-name: ${{ inputs.name }}
 
 on:
