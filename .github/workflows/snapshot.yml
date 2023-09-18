@@ -67,6 +67,6 @@ jobs:
           server-password: MAVEN_PASSWORD
 
       - name: Publish package to GitHub Packages
-        run: mvn --batch-mode deploy
+        run: mvn deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
