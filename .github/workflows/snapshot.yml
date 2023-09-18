@@ -14,10 +14,7 @@ on:
         type: string
 
 jobs:
-  release:
-    strategy:
-      matrix:
-        version: [11, 17]
+  release-snapshot:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -29,7 +26,7 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v3
         with:
-          java-version: ${{ matrix.version }}
+          java-version: 17
           distribution: 'zulu'
 
       - name: Install clojure tools
@@ -66,6 +63,6 @@ jobs:
           distribution: 'zulu'
 
       - name: Publish package to GitHub Packages
-        run: mvn -B clean deploy
+        run: mvn -B clean deploy --file target/classes/META-INF/maven/io.github.venn-billing/agent/pom.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

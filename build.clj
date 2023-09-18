@@ -2,10 +2,10 @@
   (:require [clojure.string :as string]
             [clojure.tools.build.api :as b]))
 
-(def lib 'venn-billing/agent)
+(def lib 'io.github.venn-billing/agent)
 (def main-cls (string/join "." (filter some? [(namespace lib) (name lib) "core"])))
 (def jdk-version (or (System/getenv "JVM_VERSION") "17"))
-(def version (format "0.0.1-alpha-openjdk-%s-SNAPSHOT" jdk-version))
+(def version "0.0.1-alpha-SNAPSHOT")
 (def target-dir "target")
 (def class-dir (str target-dir "/" "classes"))
 (def uber-file (format "%s/%s-standalone.jar" target-dir (name lib)))
@@ -17,7 +17,7 @@
   (b/delete {:path target-dir}))
 
 (defn prep [_]
-  (println "Writing Pom...")
+  (println "Writing pom.xml...")
   (b/write-pom {:class-dir class-dir
                 :lib lib
                 :version version
@@ -34,7 +34,7 @@
 
 (defn uber [_]
   (build _)
-  (println "Making uberjar...")
+  (println (format "Making uberjar %s..." uber-file))
   (b/uber {:class-dir class-dir
            :uber-file uber-file
            :main main-cls
