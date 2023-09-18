@@ -4,7 +4,7 @@
 
 (def lib 'venn-billing/agent)
 (def main-cls (string/join "." (filter some? [(namespace lib) (name lib) "core"])))
-(def version (format "0.0.1-SNAPSHOT"))
+(def version (format "0.0.1-alpha-SNAPSHOT"))
 (def target-dir "target")
 (def class-dir (str target-dir "/" "classes"))
 (def uber-file (format "%s/%s-standalone.jar" target-dir (name lib)))
