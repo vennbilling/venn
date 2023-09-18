@@ -50,13 +50,13 @@ jobs:
         with:
           babashka-version: 1.3.182
 
-      - name: Uberjar
+      - name: Create uberjar
         env:
-          JDK_VERSION: ${{ matrix.version }}
+          JDK_VERSION: 17
         run: |
           bb uberjar
 
-      - name: Set up Java for publishing to GitHub Packages
+      - name: Configure GitHub Packages
         uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.version }}
