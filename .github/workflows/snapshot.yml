@@ -14,7 +14,7 @@ on:
         type: string
 
 jobs:
-  publish:
+  publish-jar:
     runs-on: ubuntu-latest
     permissions:
       contents: read
