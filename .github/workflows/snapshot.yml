@@ -66,6 +66,6 @@ jobs:
           distribution: 'zulu'
 
       - name: Publish package to GitHub Packages
-        run: mvn -B deploy
+        run: mvn -B clean deploy --file target/classes/META-INF/maven/venn-billing/agent/pom.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
