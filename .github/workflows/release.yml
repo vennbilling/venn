@@ -4,12 +4,6 @@ run-name: ${{ inputs.name }}
 on:
   release:
     types: [published]
-  workflow_dispatch:
-    inputs:
-      name:
-        description: 'Run Name'
-        required: true
-        type: string
 
 env:
   REGISTRY: ghcr.io
