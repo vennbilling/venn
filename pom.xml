@@ -4,7 +4,7 @@
   <packaging>jar</packaging>
   <groupId>io.github.bryanmikaelian</groupId>
   <artifactId>agent</artifactId>
-  <version>0.0.1-alpha</version>
+  <version>0.0.1-alpha-SNAPSHOT</version>
   <name>agent</name>
   <description>The Venn Agent</description>
   <url>https://github.com/venn-billing/agent</url>
