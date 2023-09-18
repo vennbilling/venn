@@ -5,9 +5,6 @@
   <groupId>com.github.venn-billing</groupId>
   <artifactId>agent</artifactId>
   <version>0.0.1-alpha</version>
-  <configuration>
-    <release>${env.JVM_VERSION}</release>
-  </configuration>
   <name>agent</name>
   <description>The Venn Agent</description>
   <url>https://github.com/venn-billing/agent</url>
