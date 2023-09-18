@@ -4,6 +4,7 @@
   <packaging>jar</packaging>
   <groupId>io.github.venn-billing</groupId>
   <artifactId>agent</artifactId>
+  <version>VERSION</version>
   <name>agent</name>
   <description>The Venn Agent</description>
   <url>https://github.com/venn-billing/agent</url>
