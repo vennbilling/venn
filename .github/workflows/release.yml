@@ -1,15 +1,15 @@
 name: "publish artifacts"
-run-name: ${{ inputs.tag }}
+run-name: ${{ inputs.name }}
 
 on:
   release:
     types: [published]
   workflow_dispatch:
     inputs:
-      tag:
-        description: 'GitHub Tab'
+      name:
+        description: 'Run Name'
         required: true
-        type: tag
+        type: string
 
 env:
   REGISTRY: ghcr.io
@@ -64,16 +64,3 @@ jobs:
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-
-
-      - name: Set up Java for publishing to GitHub Packages
-        uses: actions/setup-java@v3
-        with:
-          java-version: ${{ matrix.version }}
-          distribution: 'zulu'
-          server-id: ossrh
-
-      - name: Publish to GitHub Packages
-        # run: mvn --batch-mode deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
