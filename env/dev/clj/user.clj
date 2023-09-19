@@ -17,6 +17,10 @@
   [_ _ value]
   (ig/ref value))
 
+(defmethod aero.core/reader 'ig/refset
+  [_ _ value]
+  (ig/refset value))
+
 (def config (read-config (clojure.java.io/resource "system.edn") {:profile :dev}))
 
 (integrant.repl/set-prep! #(ig/prep config))

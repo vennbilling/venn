@@ -1,15 +1,17 @@
 (ns venn.agent.api.routes
-  (:require [integrant.core :as ig]
-            [muuntaja.core :as m]
+  (:require [muuntaja.core :as m]
             [reitit.coercion.malli :as malli]
             [reitit.ring.coercion :as coercion]
             [reitit.ring.middleware.muuntaja :as muuntaja]
             [reitit.ring.middleware.parameters :as parameters]))
 
 
-(defn api-routes [_opts]
+(defn internal-routes [_opts]
   [["/health" {:get {:responses {200 {}}
                      :handler (fn [_] {:status 200 :body {}})}}]])
+
+(defn api-routes [_opts]
+  [[]])
 
 (defn route-data
   [opts]
@@ -31,3 +33,6 @@
                  coercion/coerce-response-middleware
                  ;; coercing request parameters
                  coercion/coerce-request-middleware]}))
+
+(derive :agent.routes/internal :router/routes)
+(derive :agent.routes/api :router/routes)

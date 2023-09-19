@@ -3,7 +3,7 @@
             [reitit.ring :as ring]
             [ring.adapter.undertow :refer [run-undertow]]
 
-            [venn.agent.api.routes :refer [route-data api-routes]]))
+            [venn.agent.api.routes :refer [route-data api-routes internal-routes]]))
 
 (defmethod ig/init-key :server/http
   [_ opts]
@@ -20,7 +20,12 @@
   (ring/ring-handler
    (ring/router routes)))
 
-(defmethod ig/init-key :routes/api
+(defmethod ig/init-key :agent.routes/api
   [_ {:keys [base-path]
       :as opts}]
   [base-path (route-data opts) (api-routes opts)])
+
+(defmethod ig/init-key :agent.routes/internal
+  [_ {:keys [base-path]
+      :as opts}]
+  [base-path (route-data opts) (internal-routes opts)])

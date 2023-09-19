@@ -9,9 +9,11 @@
   :host #or [#env AGENT_HOST "0.0.0.0"]
   :handler #ig/ref :handler/ring}
 
+ :agent.routes/internal
+ {:base-path "/internal"}
+
+ :agent.routes/api
+ {:base-path "/v1"}
 
  :handler/ring
- {:routes #ig/ref :routes/api}
-
- :routes/api
- {:base-path "/v1"}}
+ {:routes #ig/refset :router/routes}}
