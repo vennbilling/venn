@@ -3,7 +3,8 @@
             [clojure.tools.build.api :as b]))
 
 (def lib 'io.github.venn-billing/agent)
-(def main-cls (string/join "." (filter some? [(namespace lib) (name lib) "core"])))
+(def root-name (first (string/split (last (string/split (namespace lib) #"\.")) #"-")))
+(def main-cls (string/join "." (filter some? [root-name (name lib) "core"])))
 (def jdk-version (or (System/getenv "JDK_VERSION") "17"))
 (def version "0.0.1-alpha-SNAPSHOT")
 (def target-dir "target")
