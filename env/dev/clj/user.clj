@@ -5,7 +5,9 @@
             [clojure.java.io]
             [integrant.core :as ig]
             [integrant.repl :refer [prep go halt reset]]
-            [integrant.repl.state]))
+            [integrant.repl.state]
+
+            [venn.agent.server]))
 
 
 (defmethod ig/init-key :system/env [_ env]
