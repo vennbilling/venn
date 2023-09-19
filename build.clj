@@ -4,7 +4,7 @@
 
 (def lib 'io.github.venn-billing/agent)
 (def main-cls (string/join "." (filter some? [(namespace lib) (name lib) "core"])))
-(def jdk-version (or (System/getenv "JVM_VERSION") "17"))
+(def jdk-version (or (System/getenv "JDK_VERSION") "17"))
 (def version "0.0.1-alpha-SNAPSHOT")
 (def target-dir "target")
 (def class-dir (str target-dir "/" "classes"))

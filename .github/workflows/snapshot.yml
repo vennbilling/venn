@@ -46,7 +46,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: JVM_VERSION=${{ matrix.version }}
+          build-args: JDK_VERSION=${{ matrix.version }}
 
   build-and-publish-jar:
     runs-on: ubuntu-latest
