@@ -91,3 +91,18 @@ jobs:
         run: mvn -B clean deploy --file target/classes/META-INF/maven/io.github.venn-billing/agent/pom.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Java for publishing to the Maven Central Repository
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'zulu'
+          server-id: ossrh
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+
+      - name: Publish package to the Maven Central Repository
+        run: mvn -B clean deploy --file target/classes/META-INF/maven/io.github.venn-billing/agent/pom.xml
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
