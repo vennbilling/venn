@@ -6,6 +6,12 @@ on:
     types: [published]
   push:
     branches: [ main ]
+    paths:
+      - 'src/**/*.clj'
+      - 'deps.edn'
+      - 'resources/*.edn'
+      - 'Dockerfile'
+      - 'pom.xml'
 
 env:
   REGISTRY: ghcr.io
