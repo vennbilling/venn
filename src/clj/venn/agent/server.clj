@@ -1,9 +1,7 @@
 (ns venn.agent.server
   (:require [integrant.core :as ig]
             [reitit.ring :as ring]
-            [ring.adapter.undertow :refer [run-undertow]]
-
-            [venn.agent.api.routes :refer [route-data api-routes internal-routes]]))
+            [ring.adapter.undertow :refer [run-undertow]]))
 
 (defmethod ig/init-key :server/http
   [_ opts]
@@ -16,16 +14,7 @@
   (.stop server))
 
 (defmethod ig/init-key :handler/ring
-  [_ {:keys [routes]}]
+  [_ {:keys [router]}]
   (ring/ring-handler
-   (ring/router routes)))
-
-(defmethod ig/init-key :agent.routes/api
-  [_ {:keys [base-path]
-      :as opts}]
-  [base-path (route-data opts) (api-routes opts)])
-
-(defmethod ig/init-key :agent.routes/internal
-  [_ {:keys [base-path]
-      :as opts}]
-  [base-path (route-data opts) (internal-routes opts)])
+   router
+   (ring/create-default-handler)))

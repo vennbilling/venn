@@ -12,7 +12,8 @@
         metosin/reitit-core {:mvn/version "0.7.0-alpha5"}
         metosin/reitit-middleware {:mvn/version "0.7.0-alpha5"}
         metosin/reitit-malli {:mvn/version "0.7.0-alpha5"}
-        metosin/reitit-ring {:mvn/version "0.7.0-alpha5"}}
+        metosin/reitit-ring {:mvn/version "0.7.0-alpha5"}
+        metosin/ring-http-response {:mvn/version "0.9.3"}}
 
  :aliases {:build {:deps {io.github.clojure/tools.build {:git/tag "v0.9.4"
                                                          :git/sha "76b78fe"}}
