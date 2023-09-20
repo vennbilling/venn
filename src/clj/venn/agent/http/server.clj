@@ -4,10 +4,10 @@
             [ring.adapter.undertow :refer [run-undertow]]))
 
 (defmethod ig/init-key :server/http
-  [_ opts]
+  [_ {:keys [db] :as opts}]
   (let [handler (atom (delay (:handler opts)))]
     {:handler handler}
-    {:server (run-undertow (fn [req] (@@handler req)) (dissoc opts :handler))}))
+    {:server (run-undertow (fn [req] (@@handler (assoc req :db db))) (dissoc opts :handler))}))
 
 (defmethod ig/halt-key! :server/http
   [_ {:keys [server]}]
