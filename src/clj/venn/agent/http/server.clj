@@ -1,4 +1,4 @@
-(ns venn.agent.server
+(ns venn.agent.http.server
   (:require [integrant.core :as ig]
             [reitit.ring :as ring]
             [ring.adapter.undertow :refer [run-undertow]]))
