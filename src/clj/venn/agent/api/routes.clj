@@ -13,8 +13,8 @@
   ["/health" {:get {:responses {200 {:status string?}}
                     :handler (fn [_] {:status 200 :body {:status "ok"}})}}])
 
-(defn api-routes [_opts]
-  [[]])
+;;(defn api-routes [_opts]
+;;  [[]])
 
 (defn route-data
   [opts]
@@ -26,18 +26,16 @@
                  parameters/parameters-middleware
                  ;; content-negotiation
                  muuntaja/format-negotiate-middleware
-                 ;; decoding request body
-                 muuntaja/format-request-middleware
-                 ;; coercing request parameters
-                 coercion/coerce-request-middleware
                  ;; encoding response body
                  muuntaja/format-response-middleware
                  ;; exception handling
-                 coercion/coerce-exceptions-middleware
+                 exception/exception-middleware
+                 ;; decoding request body
+                 muuntaja/format-request-middleware
                  ;; coercing response bodys
                  coercion/coerce-response-middleware
-                 ;; exception handling
-                 exception/exception-middleware]}))
+                 ;; coercing request parameters
+                 coercion/coerce-request-middleware]}))
 
 (derive :agent.routes/internal :agent/routes)
 ;; (derive :agent.routes/api :agent/routes)
@@ -58,5 +56,4 @@
 
 (defmethod ig/init-key :router/core
   [_ {:keys [routes] :as opts}]
-  (prn routes)
   (ring/router ["" opts routes]))
