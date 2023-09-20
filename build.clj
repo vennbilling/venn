@@ -12,6 +12,12 @@
 (def uber-file (format "%s/%s-standalone.jar" target-dir (name lib)))
 (def basis (b/create-basis {:project "deps.edn"}))
 
+(defn- compile-clj [_]
+  (println (format "Compiling Clojure with jdk %s..." jdk-version))
+  (b/compile-clj {:basis basis
+                  :src-dirs ["src/clj" "resources" "env/prod/clj"]
+                  :class-dir class-dir}))
+
 (defn clean
   [_]
   (println (str "Cleaning " target-dir))
@@ -28,14 +34,8 @@
   (b/copy-dir {:src-dirs ["src/clj" "resources" "env/prod/clj"]
                :target-dir class-dir}))
 
-(defn- build-clj [_]
-  (println (format "Compiling Clojure with jdk %s..." jdk-version))
-  (b/compile-clj {:basis basis
-                  :src-dirs ["src/clj" "resources" "env/prod/clj"]
-                  :class-dir class-dir}))
-
 (defn uber [_]
-  (build-clj _)
+  (compile-clj _)
   (println (format "Making uberjar %s..." uber-file))
   (b/uber {:class-dir class-dir
            :uber-file uber-file
@@ -46,4 +46,4 @@
   (do (clean nil) (prep nil) (uber nil)))
 
 (defn build [_]
-  (do (clean nil) (prep nil) (build-clj nil)))
+  (do (clean nil) (prep nil) (compile-clj nil)))
