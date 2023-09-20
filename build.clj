@@ -6,7 +6,7 @@
 (def root-name (first (string/split (last (string/split (namespace lib) #"\.")) #"-")))
 (def main-cls (string/join "." (filter some? [root-name (name lib) "core"])))
 (def jdk-version (or (System/getenv "JDK_VERSION") "17"))
-(def version "0.0.1-alpha-SNAPSHOT")
+(def version "0.0.2-alpha-SNAPSHOT")
 (def target-dir "target")
 (def class-dir (str target-dir "/" "classes"))
 (def uber-file (format "%s/%s-standalone.jar" target-dir (name lib)))
