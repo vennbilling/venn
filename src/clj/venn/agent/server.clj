@@ -7,7 +7,7 @@
   [_ opts]
   (let [handler (atom (delay (:handler opts)))]
     {:handler handler}
-    {:server (run-undertow (fn [req] @@handler req) (dissoc opts :handler))}))
+    {:server (run-undertow (fn [req] (@@handler req)) (dissoc opts :handler))}))
 
 (defmethod ig/halt-key! :server/http
   [_ {:keys [server]}]
