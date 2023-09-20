@@ -2,4 +2,24 @@
  :system/env
  #profile {:dev :dev
            :test :test
-           :prod :prod}}
+           :prod :prod}
+
+ :server/http
+ {:port #long #or [#env AGENT_PORT 8080]
+  :host #or [#env AGENT_HOST "0.0.0.0"]
+  :handler #ig/ref :handler/ring}
+
+ :handler/ring
+ {:router #ig/ref :router/core}
+
+ :agent.routes/internal
+ {:base-path "/internal"}
+
+;;  :agent.routes/api
+;;  {:base-path "/v1"}
+
+ :router/routes
+ {:routes #ig/refset :agent/routes}
+
+ :router/core
+ {:routes #ig/ref :router/routes}}
