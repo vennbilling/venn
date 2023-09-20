@@ -1,4 +1,4 @@
-(ns venn.agent.api.routes
+(ns venn.agent.http.routes
   (:require [integrant.core :as ig]
             [muuntaja.core :as m]
             [reitit.coercion.malli :as malli]

@@ -7,8 +7,8 @@
             [integrant.repl :refer [prep go halt reset]]
             [integrant.repl.state]
 
-            [venn.agent.server]
-            [venn.agent.api.routes]))
+            [venn.agent.http.server]
+            [venn.agent.http.routes]))
 
 
 (defmethod ig/init-key :system/env [_ env]
