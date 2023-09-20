@@ -43,6 +43,7 @@ jobs:
           build-args: JDK_VERSION=17
 
   build-and-publish-jar:
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
