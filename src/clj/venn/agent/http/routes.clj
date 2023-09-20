@@ -6,12 +6,14 @@
             [reitit.ring.coercion :as coercion]
             [reitit.ring.middleware.exception :as exception]
             [reitit.ring.middleware.muuntaja :as muuntaja]
-            [reitit.ring.middleware.parameters :as parameters]))
+            [reitit.ring.middleware.parameters :as parameters]
+            [xtdb.api :as xt]))
 
 
 (defn internal-routes [_opts]
-  ["/health" {:get {:responses {200 {:status string?}}
-                    :handler (fn [_] {:status 200 :body {:status "ok"}})}}])
+  ["/health" {:get {:responses {200 {:db map?}}
+                    :handler (fn [{:keys [db]}]
+                               {:status 200 :body {:db (xt/status db)}})}}])
 
 ;;(defn api-routes [_opts]
 ;;  [[]])

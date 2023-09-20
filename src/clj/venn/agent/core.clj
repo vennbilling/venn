@@ -3,6 +3,7 @@
 
             [venn.agent.config :refer [config]]
             [venn.agent.env :refer [defaults]]
+            [venn.agent.db.xtdb]
             [venn.agent.http.routes]
             [venn.agent.http.server])
   (:gen-class))
