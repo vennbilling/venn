@@ -7,20 +7,10 @@
             [integrant.repl :refer [prep go halt reset]]
             [integrant.repl.state]
 
+            [venn.agent.core :refer [start-app]]
             [venn.agent.http.server]
             [venn.agent.http.routes]))
 
-
-(defmethod ig/init-key :system/env [_ env]
-  (log/debugf "Starting system using environment %s" env))
-
-(defmethod aero.core/reader 'ig/ref
-  [_ _ value]
-  (ig/ref value))
-
-(defmethod aero.core/reader 'ig/refset
-  [_ _ value]
-  (ig/refset value))
 
 (def config (read-config (clojure.java.io/resource "system.edn") {:profile :dev}))
 
