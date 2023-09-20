@@ -15,7 +15,7 @@
 (defn- compile-clj [_]
   (println (format "Compiling Clojure with jdk %s..." jdk-version))
   (b/compile-clj {:basis basis
-                  :src-dirs ["src/clj" "resources" "env/prod/clj"]
+                  :src-dirs ["src/clj" "resources" "env/prod/resources" "env/prod/clj"]
                   :class-dir class-dir}))
 
 (defn clean
@@ -31,7 +31,7 @@
                 :basis basis
                 :src-dirs ["src/clj"]})
   (println "Copying source files...")
-  (b/copy-dir {:src-dirs ["src/clj" "resources" "env/prod/clj"]
+  (b/copy-dir {:src-dirs ["src/clj" "resources" "env/prod/resources" "env/prod/clj"]
                :target-dir class-dir}))
 
 (defn uber [_]
