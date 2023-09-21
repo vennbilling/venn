@@ -1,27 +1,25 @@
 (ns venn.agent.models.customer
-  (:require [malli.core :as m]
+  (:require [venn.agent.models.validation :refer [Validation]]
+            [malli.core :as m]
             [malli.error :as me]))
 
 
-(def Customer
+(def Schema
   [:map
    [:xt/id :uuid]
    [:traits :map]])
 
+(defrecord Customer [traits]
+  Validation
+  (validate [this] (-> Schema
+                     (m/schema)
+                     (m/validate this)))
 
-(defn- errors [record]
-  (-> Customer
-      (m/explain record)
-      (me/humanize)))
+  (errors [this] (-> Schema
+                     (m/explain this)
+                     (me/humanize))))
 
-(defn- valid? [record]
-  (-> Customer
-      (m/schema)
-      (m/validate record)))
 
-(defn new-customer
-  [traits]
-  (let [customer {:xt/id (java.util.UUID/randomUUID) :traits traits}]
-    (if (valid? customer)
-      customer
-      (errors customer))))
+(defn make-customer [traits]
+  (let [record (->Customer traits)]
+    (assoc record :xt/id (java.util.UUID/randomUUID))))
