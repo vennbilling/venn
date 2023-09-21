@@ -21,5 +21,4 @@
 
 
 (defn make-customer [traits]
-  (let [record (->Customer traits)]
-    (assoc record :xt/id (java.util.UUID/randomUUID))))
+  (assoc (->Customer traits) :xt/id (java.util.UUID/randomUUID)))
