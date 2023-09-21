@@ -7,9 +7,10 @@
 (def Schema
   [:map
    [:xt/id :uuid]
+   [:identifier :string]
    [:traits :map]])
 
-(defrecord Customer [traits]
+(defrecord Customer [identifier traits]
   Validation
   (validate [this] (-> Schema
                        (m/schema)
@@ -20,5 +21,5 @@
                      (me/humanize))))
 
 
-(defn make-customer [traits]
-  (assoc (->Customer traits) :xt/id (java.util.UUID/randomUUID)))
+(defn make-customer [identifier traits]
+  (assoc (->Customer identifier traits) :xt/id (java.util.UUID/randomUUID)))

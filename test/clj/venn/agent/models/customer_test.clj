@@ -4,15 +4,18 @@
 
 (deftest customer-test
   (testing "Customer"
+    (testing "with identifier"
+      (is (= "abc" (:identifier (make-customer "abc" {})))))
+
     (testing "without traits"
-      (is (= {} (:traits (make-customer {}))))
-      (is (nil? (.errors (make-customer {}))))
-      (is (true? (.validate (make-customer {})))))
+      (is (= {} (:traits (make-customer "abc" {}))))
+      (is (nil? (.errors (make-customer "abc" {}))))
+      (is (true? (.validate (make-customer "abc" {})))))
 
     (testing "with traits"
-      (is (= {:name "Test"} (:traits (make-customer {:name "Test"}))))
-      (is (nil? (.errors (make-customer {:name "Test"}))))
-      (is (true? (.validate (make-customer {:name "Test"})))))
+      (is (= {:name "Test"} (:traits (make-customer "abc" {:name "Test"}))))
+      (is (nil? (.errors (make-customer "abc" {:name "Test"}))))
+      (is (true? (.validate (make-customer "abc" {:name "Test"})))))
 
     (testing "with xt/id"
-      (is (= false (nil? (:xt/id (make-customer {}))))))))
+      (is (= false (nil? (:xt/id (make-customer "abc" {}))))))))
