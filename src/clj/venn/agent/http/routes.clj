@@ -15,8 +15,8 @@
                     :handler (fn [{:keys [db]}]
                                {:status 200 :body {:db (xt/status db)}})}}])
 
-;;(defn api-routes [_opts]
-;;  [[]])
+(defn api-routes [_opts]
+  [])
 
 (defn route-data
   [opts]
@@ -40,12 +40,12 @@
                  coercion/coerce-request-middleware]}))
 
 (derive :agent.routes/internal :agent/routes)
-;; (derive :agent.routes/api :agent/routes)
+(derive :agent.routes/api :agent/routes)
 
-;; (defmethod ig/init-key :agent.routes/api
-;;  [_ {:keys [base-path]
-;;      :as opts}]
-;; [base-path (dissoc (route-data opts) :base-path) (api-routes opts)])
+(defmethod ig/init-key :agent.routes/api
+  [_ {:keys [base-path]
+      :as opts}]
+  [base-path (dissoc (route-data opts) :base-path) (api-routes opts)])
 
 (defmethod ig/init-key :agent.routes/internal
   [_ {:keys [base-path]
