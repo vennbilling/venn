@@ -3,6 +3,10 @@ name: "ci"
 on:
   pull_request:
     branches: [ main ]
+    paths-ignore:
+      - '**.clj'
+      - '**.edn'
+      - '**.xml'
 
 jobs:
   lint:
@@ -18,7 +22,6 @@ jobs:
           reporter: github-pr-review
 
   test:
-    name: Build Ubuntu - Java
     needs: lint
     runs-on: ubuntu-latest
     steps:
