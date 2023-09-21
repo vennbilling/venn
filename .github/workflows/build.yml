@@ -1,4 +1,4 @@
-name: "lint, build and test"
+name: "ci"
 
 on:
   pull_request:
@@ -17,12 +17,55 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
 
+  test:
+    name: Build Ubuntu - Java
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Add tools
+        run: |
+          sudo apt update
+          sudo apt install -y curl git
+
+      - name: Prepare java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Install clojure tools
+        uses: DeLaGuardo/setup-clojure@9.5
+        with:
+          cli: 'latest'
+
+      - name: Cache clojure dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.m2/repository
+            ~/.gitlibs
+            ~/.deps.clj
+          key: cljdeps-ci-test-${{ hashFiles('deps.edn', 'bb.edn') }}
+          restore-keys: cljdeps-ci-test-
+
+
+      - name: Install babashka
+        uses: turtlequeue/setup-babashka@v1.5.2
+        with:
+          babashka-version: 1.3.182
+
+      - name: Run Unit Tests
+        run: bin/kaocha
+
   build:
     strategy:
       matrix:
         version: [11, 17]
     name: Build Ubuntu - Java
-    needs: lint
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -51,8 +94,8 @@ jobs:
             ~/.m2/repository
             ~/.gitlibs
             ~/.deps.clj
-          key: cljdeps-${{ hashFiles('deps.edn', 'bb.edn') }}
-          restore-keys: cljdeps-
+          key: cljdeps-ci-build-${{ hashFiles('deps.edn', 'bb.edn') }}
+          restore-keys: cljdeps-ci-build-
 
 
       - name: Install babashka
@@ -63,6 +106,3 @@ jobs:
       - name: Compile
         run: |
           bb build
-
-      - name: Unit Tests
-        run: bin/kaocha
