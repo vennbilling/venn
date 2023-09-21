@@ -12,8 +12,8 @@
 (defrecord Customer [traits]
   Validation
   (validate [this] (-> Schema
-                     (m/schema)
-                     (m/validate this)))
+                       (m/schema)
+                       (m/validate this)))
 
   (errors [this] (-> Schema
                      (m/explain this)
