@@ -3,6 +3,10 @@ name: "ci"
 on:
   pull_request:
     branches: [ main ]
+    paths:
+      - '**.clj'
+      - '**.edn'
+      - '**.xml'
 
 jobs:
   lint:
