@@ -30,5 +30,4 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-    steps:
       - run: 'echo "No build required" '
