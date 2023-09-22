@@ -1,5 +1,5 @@
 (ns venn.agent.models.customer
-  (:require [venn.agent.models.record :refer [Validation Serialization]]
+  (:require [venn.agent.models.record :as record :refer [Validation Serialization]]
             [malli.core :as m]
             [malli.error :as me]))
 
