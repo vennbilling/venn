@@ -1,5 +1,5 @@
 (ns venn.agent.models.customer
-  (:require [venn.agent.models.validation :refer [Validation]]
+  (:require [venn.agent.models.record :as record :refer [Validation Serialization]]
             [malli.core :as m]
             [malli.error :as me]))
 
@@ -18,7 +18,10 @@
 
   (errors [this] (-> Schema
                      (m/explain this)
-                     (me/humanize))))
+                     (me/humanize)))
+
+  Serialization
+  (serialize [this] this))
 
 
 (defn make-customer [identifier traits]
