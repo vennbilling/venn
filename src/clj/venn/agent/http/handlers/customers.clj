@@ -6,5 +6,5 @@
 
 (defn upsert! [{{:keys [identifier traits]} :body-params}]
   (if (seq traits)
-    (http/created "" (make-customer identifier traits))
-    (http/created "" (make-customer identifier {}))))
+    (http/created "" (.serialize (make-customer identifier traits)))
+    (http/created "" (.serialize (make-customer identifier {})))))
