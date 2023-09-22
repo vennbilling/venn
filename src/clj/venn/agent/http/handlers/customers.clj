@@ -4,5 +4,7 @@
             [venn.agent.models.customer :refer [make-customer]]))
 
 
-(defn upsert! [_req]
-  (http/created "" (make-customer "abc" {})))
+(defn upsert! [{{:keys [identifier traits]} :body-params}]
+  (if (seq traits)
+    (http/created "" (make-customer identifier traits))
+    (http/created "" (make-customer identifier {}))))
