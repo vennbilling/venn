@@ -8,9 +8,10 @@
   [:map
    [:xt/id :uuid]
    [:identifier :string]
-   [:traits :map]])
+   [:traits :map]
+   [:billing-provider :map]])
 
-(defrecord Customer [identifier traits]
+(defrecord Customer [identifier traits billing-provider]
   Validation
   (validate [this] (-> Schema
                        (m/schema)
@@ -21,8 +22,10 @@
                      (me/humanize)))
 
   Serialization
-  (serialize [this] this))
+  (serialize [this] (-> this
+                        (dissoc :billing-provider)
+                        (assoc :billing_provider (:billing-provider this)))))
 
 
-(defn make-customer [identifier traits]
-  (assoc (->Customer identifier traits) :xt/id (java.util.UUID/randomUUID)))
+(defn make-customer [identifier traits billing-provider]
+  (assoc (->Customer identifier traits billing-provider) :xt/id (java.util.UUID/randomUUID)))
