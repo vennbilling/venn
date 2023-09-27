@@ -5,7 +5,7 @@
             [venn.agent.models.record :as record]))
 
 
-(defn upsert! [{{:keys [identifier traits]} :body-params}]
+(defn upsert! [{{:keys [identifier traits] billing-provider :billing_provider :or { billing-provider {} }} :body-params}]
   (if (seq traits)
-    (http/created "" (record/serialize (make-customer identifier traits)))
-    (http/created "" (record/serialize (make-customer identifier {})))))
+    (http/created "" (record/serialize (make-customer identifier traits billing-provider)))
+    (http/created "" (record/serialize (make-customer identifier {} billing-provider)))))
