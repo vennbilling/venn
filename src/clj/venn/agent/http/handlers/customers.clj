@@ -10,10 +10,10 @@
 
 (def identify-params-schema [:map
                              [:identifier string?]
-                             [:traits map?]
+                             [:traits {:optional true} map?]
                              [:billing_provider {:optional true} billing-provider-params-schema]])
 
-(defn upsert! [{{:keys [identifier traits] billing-provider :billing_provider :or { billing-provider {} }} :body-params}]
-  (if (seq traits)
-    (http/created "" (record/serialize (make-customer identifier traits billing-provider)))
-    (http/created "" (record/serialize (make-customer identifier {} billing-provider)))))
+(defn upsert! [{{:keys [identifier traits]
+                 billing-provider :billing_provider
+                 :or { traits {} billing-provider {} }} :body-params}]
+  (http/created "" (record/serialize (make-customer identifier traits billing-provider))))
