@@ -18,13 +18,7 @@
                                {:status 200 :body {:db (xt/status db)}})}}])
 
 (defn api-routes [_opts]
-  ["/identify" {:post {:parameters {:body [:map
-                                           [:identifier string?]
-                                           [:traits map?]
-                                           [:billing_provider {:optional true}
-                                            [:map
-                                             [:type [:enum "stripe"]]
-                                             [:identifier [:or integer? string?]]]]]}
+  ["/identify" {:post {:parameters {:body customers/identify-params-schema }
                        :responses {201 :map}
                        :handler customers/upsert!}}])
 

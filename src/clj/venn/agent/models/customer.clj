@@ -4,6 +4,8 @@
             [malli.error :as me]))
 
 
+(def valid-billing-provider-types ["stripe"])
+
 (def Schema
   [:map
    [:xt/id :uuid]
