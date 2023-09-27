@@ -21,7 +21,10 @@
   ["/identify" {:post {:parameters {:body [:map
                                            [:identifier string?]
                                            [:traits map?]
-                                           [:billing_provider {:default {}} map?]]}
+                                           [:billing_provider {:optional true}
+                                            [:map
+                                             [:type [:enum "stripe"]]
+                                             [:identifier [:or integer? string?]]]]]}
                        :responses {201 :map}
                        :handler customers/upsert!}}])
 
