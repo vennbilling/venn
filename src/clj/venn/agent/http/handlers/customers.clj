@@ -9,9 +9,9 @@
                                      [:identifier [:or integer? string?]]])
 
 (def identify-request-schema [:map
-                               [:identifier string?]
-                               [:traits {:optional true} map?]
-                               [:billing_provider {:optional true} billing-provider-params-schema]])
+                              [:identifier string?]
+                              [:traits {:optional true} map?]
+                              [:billing_provider {:optional true} [:or map? billing-provider-params-schema]]])
 
 
 (def identify-response-schema (conj identify-request-schema [:xt/id :uuid]))
