@@ -7,15 +7,15 @@
             [reitit.ring.middleware.exception :as exception]
             [reitit.ring.middleware.muuntaja :as muuntaja]
             [reitit.ring.middleware.parameters :as parameters]
-            [xtdb.api :as xt]
 
-            [venn.agent.http.handlers.customers :as customers]))
-
+            [venn.agent.http.handlers.customers :as customers]
+            [venn.agent.http.handlers.internal :as internal]))
 
 (defn internal-routes [_opts]
-  ["/health" {:get {:responses {200 {:db map?}}
-                    :handler (fn [{:keys [db]}]
-                               {:status 200 :body {:db (xt/status db)}})}}])
+  ["/health"
+   {:get {:responses {200 {:body internal/health-response-schema}
+                      500 {}}
+          :handler internal/health}}])
 
 (defn api-routes [_opts]
   [["/identify"
