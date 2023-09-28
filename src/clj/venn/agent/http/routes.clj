@@ -20,7 +20,7 @@
 (defn api-routes [_opts]
   [["/identify"
     {:post {:parameters {:body customers/identify-request-schema }
-            :responses {201 customers/identify-response-schema}
+            :responses {201 {:body customers/identify-response-schema}}
             :handler customers/upsert!}}]
 
    ["/customers"
