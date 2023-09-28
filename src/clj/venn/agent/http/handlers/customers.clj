@@ -8,10 +8,14 @@
                                      [:type [:enum valid-billing-provider-types]]
                                      [:identifier [:or integer? string?]]])
 
-(def identify-params-schema [:map
-                             [:identifier string?]
-                             [:traits {:optional true} map?]
-                             [:billing_provider {:optional true} billing-provider-params-schema]])
+(def identify-request-schema [:map
+                               [:identifier string?]
+                               [:traits {:optional true} map?]
+                               [:billing_provider {:optional true} billing-provider-params-schema]])
+
+
+(def identify-response-schema (conj identify-request-schema [:xt/id :uuid]))
+
 
 (defn upsert! [{{:keys [identifier traits]
                  billing-provider :billing_provider
