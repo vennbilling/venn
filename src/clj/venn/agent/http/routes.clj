@@ -25,8 +25,9 @@
 
    ["/customers"
     ["/:id"
-     {:get {:responses {200 :map}
-            :handler (fn [_] {:status 200 :body {}})} }]]])
+     {:get {:responses {200 {:body customers/show-response-schema}
+                        404 {}}
+            :handler customers/show}}]]])
 
 (defn route-data
   [opts]
