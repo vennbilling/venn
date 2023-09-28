@@ -1,7 +1,7 @@
 (ns venn.agent.http.handlers.customers
   (:require [ring.util.http-response :as http]
 
-            [venn.agent.models.customer :refer [make-customer valid-billing-provider-types]]
+            [venn.agent.models.customer :as customer :refer [make-customer valid-billing-provider-types]]
             [venn.agent.models.record :as record]))
 
 (def billing-provider-params-schema [:map
@@ -16,8 +16,17 @@
 
 (def identify-response-schema (conj identify-request-schema [:xt/id :uuid]))
 
+(def show-response-schema identify-response-schema)
+
 
 (defn upsert! [{{:keys [identifier traits]
                  billing-provider :billing_provider
                  :or { traits {} billing-provider {} }} :body-params}]
   (http/created "" (record/serialize (make-customer identifier traits billing-provider))))
+
+
+(defn show [{{:keys [id]} :path-params}]
+  (let [c (customer/find-by-id id)]
+    (if (seq c)
+      (http/ok c)
+      (http/not-found))))
