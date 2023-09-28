@@ -18,8 +18,8 @@
                                {:status 200 :body {:db (xt/status db)}})}}])
 
 (defn api-routes [_opts]
-  ["/identify" {:post {:parameters {:body customers/identify-params-schema }
-                       :responses {201 :map}
+  ["/identify" {:post {:parameters {:body customers/identify-request-schema }
+                       :responses {201 customers/identify-response-schema}
                        :handler customers/upsert!}}])
 
 (defn route-data
