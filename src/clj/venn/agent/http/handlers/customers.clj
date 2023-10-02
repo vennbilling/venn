@@ -16,6 +16,9 @@
 
 (def identify-response-schema (conj identify-request-schema [:xt/id :uuid]))
 
+
+(def list-response-schema [:vector identify-response-schema])
+
 (def show-response-schema identify-response-schema)
 
 
@@ -24,6 +27,9 @@
                  :or { traits {} billing-provider {} }} :body-params}]
   (http/created "" (record/serialize (make-customer identifier traits billing-provider))))
 
+
+(defn index [_]
+  (http/ok (customer/all)))
 
 (defn show [{{:keys [id]} :path-params}]
   (let [c (customer/find-by-id id)]

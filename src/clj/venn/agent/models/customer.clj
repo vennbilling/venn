@@ -33,4 +33,7 @@
   (assoc (->Customer identifier traits billing-provider) :xt/id (java.util.UUID/randomUUID)))
 
 (defn find-by-id [id]
-  (assoc (make-customer id {} {}) :xt/id (java.util.UUID/randomUUID)))
+  (record/serialize (assoc (make-customer id {} {}) :xt/id (java.util.UUID/randomUUID))))
+
+(defn all []
+  [(find-by-id "1")])
