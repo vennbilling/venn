@@ -24,10 +24,14 @@
             :handler customers/upsert!}}]
 
    ["/customers"
-    ["/:id"
-     {:get {:responses {200 {:body customers/show-response-schema}
-                        404 {}}
-            :handler customers/show}}]]])
+    {:get {:responses {200 {:body customers/list-response-schema}}
+           :handler customers/index}}]
+
+   ["/customers/:id"
+    {:get {:responses {200 {:body customers/show-response-schema}
+                       404 {}}
+           :handler customers/show}}]])
+
 
 (defn route-data
   [opts]
