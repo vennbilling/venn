@@ -1,7 +1,9 @@
 # agent
-The official agent for Venn Billing.
+The official agent for Venn, a modern billing platform.
 
-Check out the [Wiki](https://github.com/venn-billing/agent/wiki) for more details
+## What is this project?
+
+Check out our [wiki page](https://github.com/venn-billing/agent/wiki/Overview) to see the motivations for this project.
 
 ## Disclaimer
 
