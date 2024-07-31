@@ -1,20 +1,25 @@
 (ns venn.agent.core
-  (:require [integrant.core :as ig]
+  (:gen-class)
+  (:require
+    [integrant.core :as ig]
+    [venn.agent.config :refer [config]]
+    [venn.agent.db.xtdb]
+    [venn.agent.env :refer [defaults]]
+    [venn.agent.http.routes]
+    [venn.agent.http.server]))
 
-            [venn.agent.config :refer [config]]
-            [venn.agent.env :refer [defaults]]
-            [venn.agent.db.xtdb]
-            [venn.agent.http.routes]
-            [venn.agent.http.server])
-  (:gen-class))
 
 (defonce system (atom nil))
 
-(defn stop-app []
+
+(defn stop-app
+  []
   ((or (:stop defaults) (fn [])))
   (some-> (deref system) (ig/halt!)))
 
-(defn start-app []
+
+(defn start-app
+  []
   ((or (:start defaults) (fn [])))
   (->> (config (:opts defaults))
        (ig/prep)
@@ -22,5 +27,7 @@
        (reset! system))
   (.addShutdownHook (Runtime/getRuntime) (Thread. stop-app)))
 
-(defn -main [& _]
+
+(defn -main
+  [& _]
   (start-app))

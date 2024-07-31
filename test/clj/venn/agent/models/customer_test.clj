@@ -1,6 +1,8 @@
 (ns venn.agent.models.customer-test
-  (:require [venn.agent.models.customer :refer [make-customer]]
-            [clojure.test :refer [deftest testing is]]))
+  (:require
+    [clojure.test :refer [deftest testing is]]
+    [venn.agent.models.customer :refer [make-customer]]))
+
 
 (deftest customer-test
   (testing "Customer"

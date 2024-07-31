@@ -1,7 +1,10 @@
 (ns venn.agent.env
-  (:require [clojure.tools.logging :as log]))
+  (:require
+    [clojure.tools.logging :as log]))
+
 
 (def ^:const banner (slurp "resources/banner.txt"))
+
 
 (def defaults
   {:init       (fn []
