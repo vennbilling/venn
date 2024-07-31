@@ -2,11 +2,11 @@ name: "ci"
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths:
-      - '**.clj'
-      - '**.edn'
-      - '**.xml'
+      - "**.clj"
+      - "**.edn"
+      - "**.xml"
 
 jobs:
   lint:
@@ -36,13 +36,13 @@ jobs:
       - name: Prepare java
         uses: actions/setup-java@v3
         with:
-          distribution: 'zulu'
+          distribution: "zulu"
           java-version: 17
 
       - name: Install clojure tools
         uses: DeLaGuardo/setup-clojure@9.5
         with:
-          cli: 'latest'
+          cli: "latest"
 
       - name: Cache clojure dependencies
         uses: actions/cache@v3
@@ -53,7 +53,6 @@ jobs:
             ~/.deps.clj
           key: cljdeps-ci-test-${{ hashFiles('deps.edn', 'bb.edn') }}
           restore-keys: cljdeps-ci-test-
-
 
       - name: Install babashka
         uses: turtlequeue/setup-babashka@v1.5.2
@@ -66,7 +65,7 @@ jobs:
   build:
     strategy:
       matrix:
-        version: [11, 17]
+        version: [11, 17, 21]
     name: Build Ubuntu - Java
     needs: test
     runs-on: ubuntu-latest
@@ -82,13 +81,13 @@ jobs:
       - name: Prepare java
         uses: actions/setup-java@v3
         with:
-          distribution: 'zulu'
+          distribution: "zulu"
           java-version: ${{ matrix.version }}
 
       - name: Install clojure tools
         uses: DeLaGuardo/setup-clojure@9.5
         with:
-          cli: 'latest'
+          cli: "latest"
 
       - name: Cache clojure dependencies
         uses: actions/cache@v3
@@ -99,7 +98,6 @@ jobs:
             ~/.deps.clj
           key: cljdeps-ci-build-${{ hashFiles('deps.edn', 'bb.edn') }}
           restore-keys: cljdeps-ci-build-
-
 
       - name: Install babashka
         uses: turtlequeue/setup-babashka@v1.5.2
