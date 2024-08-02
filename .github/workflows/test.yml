@@ -13,6 +13,7 @@ jobs:
     strategy:
       matrix:
         version: [11, 17, 21]
+        service: ["agent"]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -49,5 +50,5 @@ jobs:
         with:
           babashka-version: 1.3.182
 
-      - name: Run Agent Tests
-        run: bb poly:test:agent
+      - name: Run Tests
+        run: bb poly:test:${{ matrix.service }}
