@@ -1,5 +1,5 @@
 {:deps {poly/customer {:local/root "../../components/customer"}
-        poly/agent {:local/root "../../bases/cli"}
+        poly/agent {:local/root "../../bases/agent"}
 
         org.clojure/clojure {:mvn/version "1.11.1"}}
 
@@ -7,4 +7,7 @@
                                                          :git/sha "76b78fe"}}
                    :ns-default build}
            :test {:extra-paths []
-                  :extra-deps  {}}}}
+                  :extra-deps  {}}
+
+           :uberjar {:main com.vennbilling.agent.core
+                     :version "0.0.2-alpha-SNAPSHOT"}}}

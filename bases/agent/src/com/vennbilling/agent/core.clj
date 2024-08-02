@@ -1,4 +1,5 @@
 (ns com.vennbilling.agent.core
+  (:gen-class)
   (:require
     [aero.core :refer [read-config]]
     [clojure.java.io :as io]
@@ -15,7 +16,7 @@
 
 
 (defonce system (atom nil))
-(def ^:const banner (slurp "resources/banner.txt"))
+(def ^:const banner (slurp (io/resource "agent/banner.txt")))
 
 
 (def defaults
@@ -127,7 +128,7 @@
 
 (defn- config
   [opts]
-  (read-config (io/resource "system.edn") opts))
+  (read-config (io/resource "agent/system.edn") opts))
 
 
 (defn stop-app
