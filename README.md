@@ -1,5 +1,6 @@
-# agent
-The official agent for Venn, a modern billing platform.
+# venn
+
+The official repo for Venn, a modern billing platform.
 
 ## What is this project?
 
