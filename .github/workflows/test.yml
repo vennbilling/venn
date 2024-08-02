@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         version: ["java-8", "java-11", "java-17", "java-21"]
-        service: ["agent"]
+        project: ["agent"]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -55,4 +55,4 @@ jobs:
 
       - name: Run Tests
         run: |
-          bb poly:test:${{ matrix.service }}
+          clj -M:poly test project:${{ matrix.project }}
