@@ -9,7 +9,7 @@ on:
       - "**.xml"
 
 jobs:
-  lint:
+  clj-kondo:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
