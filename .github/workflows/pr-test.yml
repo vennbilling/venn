@@ -1,4 +1,4 @@
-name: "ci"
+name: "pr"
 
 on:
   pull_request:
@@ -59,8 +59,8 @@ jobs:
         with:
           babashka-version: 1.3.182
 
-      - name: Run Unit Tests
-        run: bin/kaocha
+      - name: Run Polylith Tests
+        run: bb poly:test
 
   build:
     strategy:
