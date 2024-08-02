@@ -7,11 +7,5 @@
          test     {:doc  "starts a test environment and repl"
                    :task (clojure {:dir "."} "-M:test:repl")}
 
-         clean     {:doc "cleans the project"
-                    :task (clojure {:dir "."} "-T:build clean")}
-
-         build     {:doc  "compiles the project"
-                    :task (clojure {:dir "."} "-T:build build")}
-
-         uberjar   {:doc  "builds the uberjar"
-                    :task (clojure {:dir "."} "-T:build all")}}}
+         uberjar:agent   {:doc  "builds an uberjar for the agent "
+                          :task (clojure {:dir "."} "-T:build uberjar :project agent")}}}
