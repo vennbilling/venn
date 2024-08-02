@@ -1,0 +1,10 @@
+{:deps {poly/customer {:local/root "../../components/customer"}
+        poly/agent {:local/root "../../bases/cli"}
+
+        org.clojure/clojure {:mvn/version "1.11.1"}}
+
+ :aliases {:build {:deps {io.github.clojure/tools.build {:git/tag "v0.9.4"
+                                                         :git/sha "76b78fe"}}
+                   :ns-default build}
+           :test {:extra-paths []
+                  :extra-deps  {}}}}
