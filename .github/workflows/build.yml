@@ -15,7 +15,8 @@ jobs:
   build:
     strategy:
       matrix:
-        version: [11, 17, 21]
+        version: [8, 11, 17, 21]
+        service: [agent]
     name: Build Ubuntu - Java
     needs: test
     runs-on: ubuntu-latest
@@ -56,4 +57,4 @@ jobs:
 
       - name: Compile
         run: |
-          bb build
+          bb uberjar:${{ matrix.service }}
