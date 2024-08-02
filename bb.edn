@@ -1,8 +1,11 @@
 {:tasks {:requires ([babashka.fs :as fs]
                     [babashka.tasks :refer [shell]])
 
-         repl     {:doc  "starts a nREPL server"
-                   :task (clojure {:dir "."} "-M:dev:repl")}
+         dev     {:doc  "starts a dev environment and repl"
+                  :task (clojure {:dir "."} "-M:dev:repl")}
+
+         test     {:doc  "starts a test environment and repl"
+                   :task (clojure {:dir "."} "-M:test:repl")}
 
          clean     {:doc "cleans the project"
                     :task (clojure {:dir "."} "-T:build clean")}

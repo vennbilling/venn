@@ -25,15 +25,19 @@
 
            :repl {:extra-deps {nrepl/nrepl       {:mvn/version "1.0.0"}
                                cider/cider-nrepl {:mvn/version "0.34.0"}}
-                  :main-opts  ["-m" "nrepl.cmdline" 
+                  :main-opts  ["-m" "nrepl.cmdline"
                                "--middleware" "[cider.nrepl/cider-middleware]"
                                "-i"]}
 
 
-           :dev {:extra-deps {integrant/repl {:mvn/version "0.3.3"}}
-                 :extra-paths ["env/dev/clj" "test" "env/dev/resources"]}
+           :dev {:extra-deps {integrant/repl {:mvn/version "0.3.3"}
+                              org.clojure/clojure {:mvn/version "1.11.1"}}
+                 :extra-paths ["env/dev/clj" "test" "env/dev/resources", "development/src"]}
 
            :test {:main-opts ["-m" "kaocha.runner"]
                   :extra-deps {lambdaisland/kaocha {:mvn/version "1.85.1342"}
                                integrant/repl {:mvn/version "0.3.3"}}
-                  :extra-paths ["test"]}}}
+                  :extra-paths ["test"]}
+
+           :poly {:main-opts ["-m" "polylith.clj.core.poly-cli.core"]
+                  :extra-deps {polylith/clj-poly {:mvn/version "0.2.20"}}}}}
