@@ -9,7 +9,7 @@ on:
       - "**.xml"
 
 jobs:
-  venn:
+  poly:
     strategy:
       matrix:
         version: [8, 11, 17, 21]
@@ -42,8 +42,8 @@ jobs:
             ~/.m2/repository
             ~/.gitlibs
             ~/.deps.clj
-          key: cljdeps-ci-test-${{ hashFiles('deps.edn', 'bb.edn') }}
-          restore-keys: cljdeps-ci-test-
+          key: cljdeps-poly-test-${{ hashFiles('deps.edn', 'bb.edn') }}
+          restore-keys: cljdeps-poly-test-
 
       - name: Install babashka
         uses: turtlequeue/setup-babashka@v1.5.2

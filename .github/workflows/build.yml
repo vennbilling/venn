@@ -12,7 +12,7 @@ on:
       - "**.xml"
 
 jobs:
-  build:
+  poly:
     strategy:
       matrix:
         version: [8, 11, 17, 21]
