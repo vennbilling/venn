@@ -13,3 +13,4 @@ pom.xml.asc
 .cpcache/
 log
 1
+projects/**/target

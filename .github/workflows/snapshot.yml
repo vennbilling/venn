@@ -92,6 +92,6 @@ jobs:
           bb uberjar:agent
 
       - name: Publish package to GitHub Packages
-        run: mvn -B clean deploy --file target/classes/META-INF/maven/io.github.venn-billing/agent/pom.xml
+        run: mvn -B clean deploy --file projects/${{ matrix.project }}/target/classes/META-INF/maven/io.github.vennbilling/${{ matrix.project }}/pom.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

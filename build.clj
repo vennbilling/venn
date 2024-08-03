@@ -9,6 +9,7 @@
 (def default-version "0.0.0-alpha-SNAPSHOT")
 (def target-dir "target")
 (def class-dir (str target-dir "/" "classes"))
+(def github-ns "io.github.vennbilling")
 
 (def jdk-version (or (System/getenv "JDK_VERSION") "17"))
 
@@ -53,22 +54,35 @@
                          (let [version (or version default-version)
                                uber-file (or uber-file
                                              (-> aliases :uberjar :uber-file)
-                                             (str target-dir "-" project "-" version ".jar"))
+                                             (str target-dir "/" project "-" version ".jar"))
+                               basis (b/create-basis)
 
                                opts (merge opts
-                                           {:basis (b/create-basis)
+                                           {:basis basis
                                             :class-dir class-dir
                                             :compile-opts {:direct-linking true}
                                             :main main
                                             :ns-compile [main]
-                                            :uber-file uber-file})]
+                                            :uber-file uber-file})
+
+
+                               pom-lib (symbol (str github-ns "/" project))]
 
                            (b/delete {:path class-dir})
-                           ;; no src or resources to copy
+
                            (println "\nCompiling" (str main "..."))
                            (b/compile-clj opts)
+
+                           (println "Writing pom.xml")
+                           (b/write-pom {:class-dir class-dir
+                                         :lib pom-lib
+                                         :version version
+                                         :basis basis
+                                         :src-dirs ["src"]})
+                           (println "pom.xml written")
+
                            (println "Building uberjar" (str uber-file "..."))
                            (b/uber opts)
-                           (b/delete {:path class-dir})
                            (println "Uberjar is built.")
+
                            opts))))
