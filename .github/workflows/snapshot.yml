@@ -52,7 +52,9 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: JDK_VERSION=17,VENN_PROJECT=${{ matrix.project }}
+          build-args: |
+            JDK_VERSION=17
+            VENN_PROJECT=${{ matrix.project }}
 
   build-and-publish-jar:
     runs-on: ubuntu-latest
