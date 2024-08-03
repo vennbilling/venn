@@ -20,7 +20,8 @@
         com.xtdb/xtdb-core {:mvn/version "1.24.1"}}
 
  :aliases {:build {:deps {io.github.clojure/tools.build {:git/tag "v0.9.4"
-                                                         :git/sha "76b78fe"}}
+                                                         :git/sha "76b78fe"}
+                          org.clojure/tools.deps {:mvn/version "0.19.1432"}}
                    :ns-default build}
 
            :repl {:extra-deps {nrepl/nrepl       {:mvn/version "1.0.0"}

@@ -5,18 +5,17 @@ on:
   release:
     types: [published]
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
-      - 'src/**/*.clj'
-      - 'deps.edn'
-      - 'resources/*.edn'
-      - 'Dockerfile'
-      - 'pom.xml'
+      - "**.clj"
+      - "deps.edn"
+      - "resources/*.edn"
+      - "Dockerfile"
+      - "pom.xml"
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-
 
 permissions:
   contents: read
@@ -25,6 +24,9 @@ permissions:
 jobs:
   build-and-push-docker-image:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: ["agent"]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -40,7 +42,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ matrix.project }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -61,12 +63,12 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 17
-          distribution: 'zulu'
+          distribution: "zulu"
 
       - name: Install clojure tools
         uses: DeLaGuardo/setup-clojure@9.5
         with:
-          cli: 'latest'
+          cli: "latest"
 
       - name: Cache clojure dependencies
         uses: actions/cache@v3
@@ -78,7 +80,6 @@ jobs:
           key: cljdeps-snapshot-${{ hashFiles('deps.edn', 'bb.edn') }}
           restore-keys: cljdeps-snapshot-
 
-
       - name: Install babashka
         uses: turtlequeue/setup-babashka@v1.5.2
         with:
@@ -88,9 +89,9 @@ jobs:
         env:
           JDK_VERSION: 17
         run: |
-          bb uberjar
+          bb uberjar:agent
 
       - name: Publish package to GitHub Packages
-        run: mvn -B clean deploy --file target/classes/META-INF/maven/io.github.venn-billing/agent/pom.xml
+        run: mvn -B clean deploy --file projects/${{ matrix.project }}/target/classes/META-INF/maven/io.github.vennbilling/${{ matrix.project }}/pom.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,62 +1,88 @@
 (ns build
   (:require
-    [clojure.string :as string]
-    [clojure.tools.build.api :as b]))
+    [clojure.java.io :as io]
+    [clojure.tools.build.api :as b]
+    [clojure.tools.deps :as t]
+    [clojure.tools.deps.util.dir :refer [with-dir]]))
 
 
-(def lib 'io.github.venn-billing/agent)
-(def root-name (first (string/split (last (string/split (namespace lib) #"\.")) #"-")))
-(def main-cls (string/join "." (filter some? [root-name (name lib) "core"])))
-(def jdk-version (or (System/getenv "JDK_VERSION") "17"))
-(def version "0.0.2-alpha-SNAPSHOT")
+(def default-version "0.0.0-alpha-SNAPSHOT")
 (def target-dir "target")
 (def class-dir (str target-dir "/" "classes"))
-(def uber-file (format "%s/%s-standalone.jar" target-dir (name lib)))
-(def basis (b/create-basis {:project "deps.edn"}))
+(def github-ns "io.github.vennbilling")
+
+(def jdk-version (or (System/getenv "JDK_VERSION") "17"))
 
 
-(defn- compile-clj
-  [_]
-  (println (format "Compiling Clojure with jdk %s..." jdk-version))
-  (b/compile-clj {:basis basis
-                  :src-dirs ["src/clj" "resources" "env/prod/resources" "env/prod/clj"]
-                  :class-dir class-dir}))
+(defn- get-project-aliases
+  []
+  (let [edn-fn (juxt :root-edn :project-edn)]
+    (-> (t/find-edn-maps)
+        (edn-fn)
+        (t/merge-edns)
+        :aliases)))
 
 
-(defn clean
-  [_]
-  (println (str "Cleaning " target-dir))
-  (b/delete {:path target-dir}))
+(defn- ensure-project-root
+  "Given a task name and a project name, ensure the project
+   exists and seems valid, and return the absolute path to it."
+  [task project]
+  (let [project-root (str (System/getProperty "user.dir") "/projects/" project)]
+    (when-not (and project
+                   (.exists (io/file project-root))
+                   (.exists (io/file (str project-root "/deps.edn"))))
+      (throw (ex-info (str task " task requires a valid :project option") {:project project})))
+    project-root))
 
 
-(defn prep
-  [_]
-  (println "Writing pom.xml...")
-  (b/write-pom {:class-dir class-dir
-                :lib lib
-                :version version
-                :basis basis
-                :src-dirs ["src/clj"]})
-  (println "Copying source files...")
-  (b/copy-dir {:src-dirs ["src/clj" "resources" "env/prod/resources" "env/prod/clj"]
-               :target-dir class-dir}))
+(defn uberjar
+  [{:keys [project uber-file] :as opts}]
+  (let [project-root (ensure-project-root "uberjar" project)
+        aliases (with-dir (io/file project-root) (get-project-aliases))
+        main (-> aliases :uberjar :main)
+        version (-> aliases :uberjar :version)]
+
+    (when-not main
+      (throw (ex-info (str "the " project " project's deps.edn file does not specify the :main namespace in its :uberjar alias")
+                      {:aliases aliases})))
+
+    (when-not version
+      (println (str "*Warning*. The " project " project's deps.edn file does not specify a :version. The default of :version is being used.")
+               {:version default-version}))
+
+    (b/with-project-root project-root
+                         (let [version (or version default-version)
+                               uber-file (or uber-file
+                                             (-> aliases :uberjar :uber-file)
+                                             (str target-dir "/" project "-" version ".jar"))
+                               basis (b/create-basis)
+
+                               opts (merge opts
+                                           {:basis basis
+                                            :class-dir class-dir
+                                            :compile-opts {:direct-linking true}
+                                            :main main
+                                            :ns-compile [main]
+                                            :uber-file uber-file})
 
 
-(defn uber
-  [_]
-  (compile-clj _)
-  (println (format "Making uberjar %s..." uber-file))
-  (b/uber {:class-dir class-dir
-           :uber-file uber-file
-           :main main-cls
-           :basis basis}))
+                               pom-lib (symbol (str github-ns "/" project))]
 
+                           (b/delete {:path class-dir})
 
-(defn all
-  [_]
-  (do (clean nil) (prep nil) (uber nil)))
+                           (println "\nCompiling" (str main "..."))
+                           (b/compile-clj opts)
 
+                           (println "Writing pom.xml")
+                           (b/write-pom {:class-dir class-dir
+                                         :lib pom-lib
+                                         :version version
+                                         :basis basis
+                                         :src-dirs ["src"]})
+                           (println "pom.xml written")
 
-(defn build
-  [_]
-  (do (clean nil) (prep nil) (compile-clj nil)))
+                           (println "Building uberjar" (str uber-file "..."))
+                           (b/uber opts)
+                           (println "Uberjar is built.")
+
+                           opts))))
