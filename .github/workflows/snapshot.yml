@@ -24,10 +24,10 @@ permissions:
 
 jobs:
   build-and-push-docker-image:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         project: ["agent"]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
