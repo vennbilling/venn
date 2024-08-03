@@ -10,7 +10,7 @@
     <repository>
       <id>github</id>
       <name>GitHub Packages</name>
-      <url>https://maven.pkg.github.com/vennbilling/venn</url>
+      <url>https://maven.pkg.github.com/vennbilling/agent</url>
     </repository>
   </distributionManagement>
 </project>
