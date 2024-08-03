@@ -1,7 +1,7 @@
 # Build uberjar
 ARG JDK_VERSION
 
-FROM clojure:openjdk-${JDK_VERSION} AS build
+FROM clojure:temurin-${JDK_VERSION}-tools-deps-noble AS build
 
 ARG VENN_PROJECT
 
