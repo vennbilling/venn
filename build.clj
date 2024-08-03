@@ -52,7 +52,7 @@
 
     (b/with-project-root project-root
                          (let [version (or version default-version)
-                               uber-file (or (str uber-file)
+                               uber-file (or uber-file
                                              (-> aliases :uberjar :uber-file)
                                              (str target-dir "/" project "-" version ".jar"))
                                basis (b/create-basis)
@@ -63,7 +63,7 @@
                                             :compile-opts {:direct-linking true}
                                             :main main
                                             :ns-compile [main]
-                                            :uber-file uber-file})
+                                            :uber-file (str uber-file)})
 
 
                                pom-lib (symbol (str github-ns "/" project))]
