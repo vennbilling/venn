@@ -45,5 +45,5 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            JDK_VERSION=17
+            JDK_VERSION=21
             VENN_PROJECT=${{ matrix.project }}
