@@ -1,9 +1,9 @@
-name: "snapshot"
+name: "prerelease"
 run-name: ${{ inputs.name }}
 
 on:
   release:
-    types: [published]
+    types: [prereleased]
   workflow_dispatch:
   push:
     branches: [main]

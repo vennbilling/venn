@@ -2,9 +2,8 @@ name: "release"
 run-name: ${{ inputs.name }}
 
 on:
-  push:
-    tags:
-      - "v*"
+  release:
+    type: [published]
 
 env:
   REGISTRY: ghcr.io
