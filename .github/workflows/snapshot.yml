@@ -95,7 +95,7 @@ jobs:
         env:
           JDK_VERSION: 17
         run: |
-          bb uberjar:agent
+          bb uberjar:${{ matrix.project }}
 
       - name: Publish package to GitHub Packages
         run: mvn -B clean deploy --file projects/${{ matrix.project }}/target/classes/META-INF/maven/io.github.vennbilling/${{ matrix.project }}/pom.xml

@@ -4,13 +4,13 @@
       This file will be used to generate a pom.xml via `bb uberjar`
   -->
   <modelVersion>4.0.0</modelVersion>
-  <url>https://github.com/venn-billing/agent</url>
-  <description>The Venn Billing Agent</description>
+  <url>https://github.com/vennbilling/venn</url>
+  <description>Venn Billing</description>
   <distributionManagement>
     <repository>
       <id>github</id>
       <name>GitHub Packages</name>
-      <url>https://maven.pkg.github.com/venn-billing/agent</url>
+      <url>https://maven.pkg.github.com/vennbilling/venn</url>
     </repository>
   </distributionManagement>
 </project>
