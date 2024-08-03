@@ -6,7 +6,7 @@ FROM clojure:openjdk-${JDK_VERSION} AS build
 WORKDIR /
 COPY . .
 
-RUN clojure -T:build uberjar :project "${VENN_PROJECT}" :uber-file "target/${VENN_PROJECT}-standalone.jar"
+RUN clojure -T:build uberjar :project ${VENN_PROJECT} :uber-file target/${VENN_PROJECT}-standalone.jar
 
 FROM azul/zulu-openjdk-alpine:${JDK_VERSION}
 
