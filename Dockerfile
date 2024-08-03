@@ -5,7 +5,10 @@ FROM clojure:temurin-${JDK_VERSION}-tools-deps-noble AS build
 
 ARG VENN_PROJECT
 
-WORKDIR /
+RUN mkdir build
+
+WORKDIR /build
+
 COPY . .
 
 RUN clojure -T:build uberjar :project ${VENN_PROJECT} :uber-file target/${VENN_PROJECT}-standalone.jar
@@ -17,7 +20,11 @@ FROM azul/zulu-openjdk-alpine:${JDK_VERSION}
 
 ARG VENN_PROJECT
 
-COPY --from=build projects/${VENN_PROJECT}/target/${VENN_PROJECT}-standalone.jar /app/${VENN_PROJECT}-standalone.jar
+RUN mkdir app
+
+WORKDIR /app
+
+COPY --from=build /build/projects/${VENN_PROJECT}/target/${VENN_PROJECT}-standalone.jar .
 
 EXPOSE 8080
 
