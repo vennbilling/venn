@@ -52,7 +52,7 @@
 
     (b/with-project-root project-root
                          (let [version (or version default-version)
-                               uber-file (or uber-file
+                               uber-file (or (str uber-file)
                                              (-> aliases :uberjar :uber-file)
                                              (str target-dir "/" project "-" version ".jar"))
                                basis (b/create-basis)
