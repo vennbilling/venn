@@ -9,9 +9,6 @@
 (def default-version "0.0.0-alpha-SNAPSHOT")
 (def target-dir "target")
 (def class-dir (str target-dir "/" "classes"))
-(def github-ns "io.github.vennbilling")
-
-(def jdk-version (or (System/getenv "JDK_VERSION") "17"))
 
 
 (defn- get-project-aliases
@@ -63,23 +60,12 @@
                                             :compile-opts {:direct-linking true}
                                             :main main
                                             :ns-compile [main]
-                                            :uber-file (str uber-file)})
-
-
-                               pom-lib (symbol (str github-ns "/" project))]
+                                            :uber-file (str uber-file)})]
 
                            (b/delete {:path class-dir})
 
                            (println "\nCompiling" (str main "..."))
                            (b/compile-clj opts)
-
-                           (println "Writing pom.xml")
-                           (b/write-pom {:class-dir class-dir
-                                         :lib pom-lib
-                                         :version version
-                                         :basis basis
-                                         :src-dirs ["src"]})
-                           (println "pom.xml written")
 
                            (println "Building uberjar" (str uber-file "..."))
                            (b/uber opts)
