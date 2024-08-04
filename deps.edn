@@ -37,16 +37,9 @@
                               integrant/repl {:mvn/version "0.3.3"}
                               org.clojure/clojure {:mvn/version "1.11.1"}}
 
-                 :extra-paths ["env/dev/clj"
-                               "test"
-                               "env/dev/resources"
-                               "development/src"]}
+                 :extra-paths ["development/src"]}
 
-           :test {:main-opts ["-m" "kaocha.runner"]
-                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.85.1342"}
-                               integrant/repl {:mvn/version "0.3.3"}}
-                  :extra-paths ["test"
-                                "components/customer/test"]}
+           :test {:extra-paths ["components/customer/test"]}
 
            :poly {:main-opts ["-m" "polylith.clj.core.poly-cli.core"]
                   :extra-deps {polylith/clj-poly {:mvn/version "0.2.20"}}}}}

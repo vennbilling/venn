@@ -1,5 +1,4 @@
-{
- :system/env
+{:system/env
  #profile {:dev :dev
            :test :test
            :prod :prod}
@@ -18,9 +17,6 @@
 
  :agent.routes/internal
  {:base-path "/internal"}
-
- :agent.routes/api
- {:base-path "/v1"}
 
  :router/routes
  {:routes #ig/refset :agent/routes}

@@ -3,6 +3,11 @@
     [com.vennbilling.customer.core :as core]))
 
 
+(defn serialize
+  [record]
+  (core/serialize record))
+
+
 (defn make-customer
   [identifier traits billing-provider]
   (core/make-customer identifier traits billing-provider))
