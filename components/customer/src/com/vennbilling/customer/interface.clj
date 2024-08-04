@@ -11,3 +11,8 @@
 (defn find-by-id
   [id]
   (core/find-by-id id))
+
+
+(defn all
+  []
+  [(core/find-by-id "1")])
