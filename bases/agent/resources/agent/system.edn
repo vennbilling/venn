@@ -6,11 +6,7 @@
  :server/http
  {:port #long #or [#env AGENT_PORT 8080]
   :host #or [#env AGENT_HOST "0.0.0.0"]
-  :handler #ig/ref :handler/ring
-  :db #ig/ref :db/xtdb}
-
- :db/xtdb
- {}
+  :handler #ig/ref :handler/ring}
 
  :handler/ring
  {:router #ig/ref :router/core}

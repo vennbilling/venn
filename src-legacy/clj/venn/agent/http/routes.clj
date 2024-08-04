@@ -8,7 +8,6 @@
     [reitit.ring.middleware.exception :as exception]
     [reitit.ring.middleware.muuntaja :as muuntaja]
     [reitit.ring.middleware.parameters :as parameters]
-    [venn.agent.http.handlers.customers :as customers]
     [venn.agent.http.handlers.internal :as internal]))
 
 
@@ -18,23 +17,6 @@
    {:get {:responses {200 {:body internal/health-response-schema}
                       500 {}}
           :handler internal/health}}])
-
-
-(defn api-routes
-  [_opts]
-  [["/identify"
-    {:post {:parameters {:body customers/identify-request-schema}
-            :responses {201 {:body customers/identify-response-schema}}
-            :handler customers/upsert!}}]
-
-   ["/customers"
-    {:get {:responses {200 {:body customers/list-response-schema}}
-           :handler customers/index}}]
-
-   ["/customers/:id"
-    {:get {:responses {200 {:body customers/show-response-schema}
-                       404 {}}
-           :handler customers/show}}]])
 
 
 (defn route-data
@@ -60,13 +42,6 @@
 
 
 (derive :agent.routes/internal :agent/routes)
-(derive :agent.routes/api :agent/routes)
-
-
-(defmethod ig/init-key :agent.routes/api
-  [_ {:keys [base-path]
-      :as opts}]
-  [base-path (dissoc (route-data opts) :base-path) (api-routes opts)])
 
 
 (defmethod ig/init-key :agent.routes/internal

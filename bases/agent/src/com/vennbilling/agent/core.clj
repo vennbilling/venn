@@ -4,6 +4,7 @@
     [aero.core :refer [read-config]]
     [clojure.java.io :as io]
     [clojure.tools.logging :as log]
+    [com.vennbilling.customer.interface :as customer]
     [integrant.core :as ig]
     [muuntaja.core :as m]
     [reitit.coercion.malli :as malli]
@@ -12,7 +13,8 @@
     [reitit.ring.middleware.exception :as exception]
     [reitit.ring.middleware.muuntaja :as muuntaja]
     [reitit.ring.middleware.parameters :as parameters]
-    [ring.adapter.undertow :refer [run-undertow]]))
+    [ring.adapter.undertow :refer [run-undertow]]
+    [ring.util.http-response :as http]))
 
 
 (defonce system (atom nil))
@@ -62,6 +64,50 @@
     (ring/create-default-handler)))
 
 
+(def valid-billing-provider-types ["stripe"])
+
+
+(def billing-provider-params-schema
+  [:map
+   [:type [:enum valid-billing-provider-types]]
+   [:identifier [:or integer? string?]]])
+
+
+(def identify-request-schema
+  [:map
+   [:identifier string?]
+   [:traits {:optional true} map?]
+   [:billing_provider {:optional true} [:or map? billing-provider-params-schema]]])
+
+
+(def identify-response-schema (conj identify-request-schema [:xt/id :uuid]))
+
+
+(def list-response-schema [:vector identify-response-schema])
+
+(def show-response-schema identify-response-schema)
+
+
+(defn upsert!
+  [{{:keys [identifier traits]
+     billing-provider :billing_provider
+     :or {traits {} billing-provider {}}} :body-params}]
+  (http/created "" (customer/serialize (customer/make-customer identifier traits billing-provider))))
+
+
+(defn index
+  [_]
+  (http/ok (customer/all)))
+
+
+(defn show
+  [{{:keys [id]} :path-params}]
+  (let [c (customer/find-by-id id)]
+    (if (seq c)
+      (http/ok c)
+      (http/not-found))))
+
+
 (defn internal-routes
   [_opts]
   [["/health"
@@ -73,9 +119,18 @@
 (defn api-routes
   [_opts]
   [["/identify"
-    {:post {:parameters {:body {}}
-            :responses {201 {:body {}}}
-            :handler (fn [])}}]])
+    {:post {:parameters {:body identify-request-schema}
+            :responses {201 {:body identify-response-schema}}
+            :handler upsert!}}]
+
+   ["/customers"
+    {:get {:responses {200 {:body list-response-schema}}
+           :handler index}}]
+
+   ["/customers/:id"
+    {:get {:responses {200 {:body show-response-schema}
+                       404 {}}
+           :handler show}}]])
 
 
 (defn route-data

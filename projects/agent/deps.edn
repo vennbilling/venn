@@ -10,4 +10,4 @@
                   :extra-deps  {}}
 
            :uberjar {:main com.vennbilling.agent.core
-                     :version "0.0.2-alpha-SNAPSHOT"}}}
+                     :version "0.0.3-alpha-SNAPSHOT"}}}
