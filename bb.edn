@@ -5,10 +5,4 @@
                   :task (clojure {:dir "."} "-M:dev:repl")}
 
          test     {:doc  "starts a test environment and repl"
-                   :task (clojure {:dir "."} "-M:test:repl")}
-
-         poly:test:agent {:doc "run agent tests"
-                          :task (clojure {:dir "."} "-M:poly test project:agent")}
-
-         uberjar:agent   {:doc  "builds an uberjar for the agent "
-                          :task (clojure {:dir "."} "-T:build uberjar :project agent")}}}
+                   :task (clojure {:dir "."} "-M:test:repl")}}}

@@ -108,12 +108,22 @@
       (http/not-found))))
 
 
+(def health-response-schema
+  [:map
+   [:db map?]])
+
+
+(defn health
+  [{:keys []}]
+  (http/ok {:db {}}))
+
+
 (defn internal-routes
   [_opts]
-  [["/health"
-    {:get {:parameters {:body {}}
-           :responses {200 {:body {}}}
-           :handler (fn [])}}]])
+  ["/health"
+   {:get {:responses {200 {:body health-response-schema}
+                      500 {}}
+          :handler health}}])
 
 
 (defn api-routes
