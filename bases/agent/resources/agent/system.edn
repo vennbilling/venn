@@ -1,6 +1,5 @@
 {:system/env
  #profile {:dev :dev
-           :test :test
            :prod :prod}
 
  :server/http

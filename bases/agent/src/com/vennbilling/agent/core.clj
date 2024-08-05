@@ -17,21 +17,6 @@
     [ring.util.http-response :as http]))
 
 
-(defonce system (atom nil))
-(def ^:const banner (slurp (io/resource "agent/banner.txt")))
-
-
-(def defaults
-  {:init       (fn []
-                 (log/info "venn agent starting using the development or test profile"))
-   :start      (fn []
-                 (log/infof "\n\n%s" banner)
-                 (log/info "venn agent started successfully using the development or test profile"))
-   :stop       (fn []
-                 (log/info "venn agent has shut down successfully"))
-   :opts {:profile :dev}})
-
-
 (defmethod aero.core/reader 'ig/ref
   [_ _ value]
   (ig/ref value))
@@ -191,6 +176,10 @@
   (ring/router ["" opts routes]))
 
 
+(defonce system (atom nil))
+(def ^:const banner (slurp (io/resource "agent/banner.txt")))
+
+
 (defn- config
   [opts]
   (read-config (io/resource "agent/system.edn") opts))
@@ -198,14 +187,17 @@
 
 (defn stop-app
   []
-  ((or (:stop defaults) (fn [])))
+  (log/info "venn agent has shut down successfully")
   (some-> (deref system) (ig/halt!)))
 
 
 (defn start-app
-  []
-  ((or (:start defaults) (fn [])))
-  (->> (config (:opts defaults))
+  [{:keys [profile] :as opts}]
+
+  (log/infof "\n\n%s" banner)
+  (log/info "venn agent started successfully. current profile" profile)
+
+  (->> (config opts)
        (ig/prep)
        (ig/init)
        (reset! system))
@@ -214,4 +206,4 @@
 
 (defn -main
   [& _]
-  (start-app))
+  (start-app {:profile :prod}))
