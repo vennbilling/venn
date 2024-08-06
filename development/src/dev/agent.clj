@@ -6,7 +6,8 @@
     [com.vennbilling.agent.core]
     [integrant.core :as ig]
     [integrant.repl :refer [prep go halt reset init]]
-    [integrant.repl.state]))
+    [integrant.repl.state]
+    [io.pedestal.log :as log]))
 
 
 (def config-file (io/resource "../../../bases/agent/resources/agent/system.edn"))

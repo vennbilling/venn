@@ -20,7 +20,7 @@
                               integrant/repl {:mvn/version "0.3.3"}
                               org.clojure/clojure {:mvn/version "1.11.1"}}
 
-                 :extra-paths ["development/src"]}
+                 :extra-paths ["development/src" "development/resources"]}
 
            :test {:extra-paths ["components/customer/test"]}
 
