@@ -3,9 +3,9 @@
   (:require
     [aero.core :refer [read-config]]
     [clojure.java.io :as io]
-    [clojure.tools.logging :as log]
     [com.vennbilling.customer.interface :as customer]
     [integrant.core :as ig]
+    [io.pedestal.log :as log]
     [muuntaja.core :as m]
     [reitit.coercion.malli :as malli]
     [reitit.ring :as ring]
@@ -14,6 +14,7 @@
     [reitit.ring.middleware.muuntaja :as muuntaja]
     [reitit.ring.middleware.parameters :as parameters]
     [ring.adapter.undertow :refer [run-undertow]]
+    [ring.logger :as logger]
     [ring.util.http-response :as http]))
 
 
@@ -44,9 +45,10 @@
 
 (defmethod ig/init-key :handler/ring
   [_ {:keys [router]}]
-  (ring/ring-handler
-    router
-    (ring/create-default-handler)))
+  (logger/wrap-with-logger
+    (ring/ring-handler
+      router
+      (ring/create-default-handler))))
 
 
 (def valid-billing-provider-types ["stripe"])
@@ -187,15 +189,17 @@
 
 (defn stop-app
   []
-  (log/info "venn agent has shut down successfully")
+  (log/info :msg "venn agent has shut down successfully")
   (some-> (deref system) (ig/halt!)))
 
 
 (defn start-app
   [{:keys [profile] :as opts}]
 
-  (log/infof "\n\n%s" banner)
-  (log/info "venn agent started successfully. current profile" profile)
+  (System/setProperty "org.jboss.logging.provider" "slf4j")
+
+  (println "\n" banner)
+  (log/info :msg "venn agent started successfully." :profile profile)
 
   (->> (config opts)
        (ig/prep)
