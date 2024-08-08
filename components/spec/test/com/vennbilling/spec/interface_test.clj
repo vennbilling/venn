@@ -12,23 +12,32 @@
 
       (testing "http"
         (testing "POST request"
-          (let [{{:keys [parameters responses]} :post} route]
-            (testing "parameter schema"
-              (is (= (:body parameters) spec/identify-request-schema)))
-
-            (testing "responses"
-              (is (= responses {201 {:body spec/identify-response-schema}}))))
-
           (testing "handler function"
-            (let [{{:keys [handler]} :post} route
-                  request {:body-params {:identifier "a" :traits {} :billing_provider {}}}
-                  resp (handler request)
-                  {:keys [status body]} resp
-                  {:keys [identifier traits billing-provider]} body]
-              (is (= 201 status))
-              (is (= "a" identifier))
-              (is (= {} traits))
-              (is (nil? billing-provider)))))))))
-
-
-((:handler (:post (last spec/identify-route))) {:body-params {:identifier "a" :traits {} :billing_provider {}}})
+            (let [{{:keys [handler]} :post} route]
+              (testing "with no traits or billing providider"
+                (let [request {:body-params {:identifier "a" :traits {} :billing_provider {}}}
+                      resp (handler request)
+                      {:keys [status body]} resp
+                      {:keys [identifier traits billing-provider]} body]
+                  (is (= 201 status))
+                  (is (= "a" identifier))
+                  (is (= {} traits))
+                  (is (nil? billing-provider))))
+              (testing "with traits but no billing provider"
+                (let [request {:body-params {:identifier "a" :traits {:customer true} :billing_provider {}}}
+                      resp (handler request)
+                      {:keys [status body]} resp
+                      {:keys [identifier traits billing-provider]} body]
+                  (is (= 201 status))
+                  (is (= "a" identifier))
+                  (is (= {:customer true} traits))
+                  (is (nil? billing-provider))))
+              (testing "with all attributes"
+                (let [request {:body-params {:identifier "a" :traits {:customer true} :billing_provider {:name "stripe"}}}
+                      resp (handler request)
+                      {:keys [status body]} resp
+                      {:keys [identifier traits billing_provider]} body]
+                  (is (= 201 status))
+                  (is (= "a" identifier))
+                  (is (= {:customer true} traits))
+                  (is (= {:name "stripe"} billing_provider)))))))))))

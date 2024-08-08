@@ -5,9 +5,9 @@
 
 ;; IDENTIFY
 
-;; TODO: These should be private. The customer API is using them but should define its own schema + routes
-(def identify-request-schema core/identify-request-schema)
+;; TODO: This should be private but the customer API is using this
 (def identify-response-schema core/identify-response-schema)
+
 (def identify-route core/identify-route)
 
 

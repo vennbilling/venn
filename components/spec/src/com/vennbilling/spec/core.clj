@@ -13,8 +13,7 @@
    [:identifier [:or integer? string?]]])
 
 
-;; TODO: This should be private but the customer API is using this
-(def identify-request-schema
+(def ^:private identify-request-schema
   [:map
    [:identifier string?]
    [:traits {:optional true} map?]
