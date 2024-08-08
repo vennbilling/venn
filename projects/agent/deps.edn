@@ -1,4 +1,6 @@
-{:deps {poly/customer {:local/root "../../components/customer"}
+{:deps {poly/spec {:local/root "../../components/spec"}
+        poly/customer {:local/root "../../components/customer"}
+
         poly/agent {:local/root "../../bases/agent"}
 
         org.clojure/clojure {:mvn/version "1.11.1"}}

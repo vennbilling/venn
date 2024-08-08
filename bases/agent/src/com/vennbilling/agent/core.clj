@@ -4,6 +4,7 @@
     [aero.core :refer [read-config]]
     [clojure.java.io :as io]
     [com.vennbilling.customer.interface :as customer]
+    [com.vennbilling.spec.interface :as venn-spec]
     [integrant.core :as ig]
     [io.pedestal.log :as log]
     [muuntaja.core :as m]
@@ -51,35 +52,9 @@
       (ring/create-default-handler))))
 
 
-(def valid-billing-provider-types ["stripe"])
-
-
-(def billing-provider-params-schema
-  [:map
-   [:type [:enum valid-billing-provider-types]]
-   [:identifier [:or integer? string?]]])
-
-
-(def identify-request-schema
-  [:map
-   [:identifier string?]
-   [:traits {:optional true} map?]
-   [:billing_provider {:optional true} [:or map? billing-provider-params-schema]]])
-
-
-(def identify-response-schema (conj identify-request-schema [:xt/id :uuid]))
-
-
-(def list-response-schema [:vector identify-response-schema])
-
-(def show-response-schema identify-response-schema)
-
-
-(defn upsert!
-  [{{:keys [identifier traits]
-     billing-provider :billing_provider
-     :or {traits {} billing-provider {}}} :body-params}]
-  (http/created "" (customer/serialize (customer/make-customer identifier traits billing-provider))))
+;; TODO: This should be defined in the customer component
+(def list-response-schema [:vector venn-spec/identify-response-schema])
+(def show-response-schema venn-spec/identify-response-schema)
 
 
 (defn index
@@ -115,10 +90,7 @@
 
 (defn api-routes
   [_opts]
-  [["/identify"
-    {:post {:parameters {:body identify-request-schema}
-            :responses {201 {:body identify-response-schema}}
-            :handler upsert!}}]
+  [venn-spec/identify-route
 
    ["/customers"
     {:get {:responses {200 {:body list-response-schema}}

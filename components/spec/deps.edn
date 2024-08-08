@@ -1,0 +1,4 @@
+{:paths ["src" "resources"]
+ :deps {metosin/ring-http-response {:mvn/version "0.9.3"}}
+ :aliases {:test {:extra-paths ["test"]
+                  :extra-deps {}}}}
