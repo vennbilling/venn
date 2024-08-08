@@ -12,9 +12,12 @@
 
 
 ;; CHARGE
+(def charge-route [])
 
 
 ;; USAGE
+(def usage-route [])
 
 
 ;; REVERSE
+(def reverse-route [])
