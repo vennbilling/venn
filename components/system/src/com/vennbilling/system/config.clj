@@ -1,7 +1,6 @@
 (ns com.vennbilling.system.config
   (:require
     [aero.core :as aero]
-    [clojure.java.io :as io]
     [integrant.core :as ig]))
 
 

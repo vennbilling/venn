@@ -103,12 +103,8 @@
 (def config-file (io/resource "agent/system.edn"))
 
 
-(defn start-app
-  [{:keys [profile] :as opts}]
-  (system/start banner config-file opts)
-  (log/info :msg "venn agent started successfully." :profile profile))
-
-
 (defn -main
   [& _]
-  (start-app {:profile :prod}))
+  ;; TODO: Pass profile as args
+  (system/start banner config-file {:profile :prod})
+  (log/info :msg "venn agent started successfully."))

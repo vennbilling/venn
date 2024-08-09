@@ -5,7 +5,7 @@
     [integrant.core :as ig]))
 
 
-(defonce system (atom nil))
+(defonce ^:private system (atom nil))
 
 (def ^:private default-config-file (io/resource "system/default.edn"))
 
