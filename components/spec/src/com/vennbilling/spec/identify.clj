@@ -1,4 +1,4 @@
-(ns com.vennbilling.spec.core
+(ns com.vennbilling.spec.identify
   (:require
     [com.vennbilling.customer.interface :as customer]
     [ring.util.http-response :as http]
@@ -21,8 +21,7 @@
    [:billing_provider {:optional true} [:or map? billing-provider-params-schema]]])
 
 
-;; TODO: This should be private but the customer API is using this
-(def identify-response-schema (conj identify-request-schema [:xt/id :uuid]))
+(def ^:private identify-response-schema (conj identify-request-schema [:xt/id :uuid]))
 
 
 (defn- identify-handler
@@ -32,7 +31,7 @@
   (http/created "" (customer/serialize (customer/make-customer identifier traits billing-provider))))
 
 
-(def identify-route
+(def route
   ["/identify"
    {:post {:parameters {:body identify-request-schema}
            :responses {http-status/created {:body identify-response-schema}}
