@@ -4,6 +4,7 @@
     [aero.core :refer [read-config]]
     [clojure.java.io :as io]
     [com.vennbilling.customer.interface :as customer]
+    [com.vennbilling.healthcheck.interface :as healthcheck]
     [com.vennbilling.spec.interface :as venn-spec]
     [integrant.core :as ig]
     [io.pedestal.log :as log]
@@ -70,22 +71,9 @@
       (http/not-found))))
 
 
-(def health-response-schema
-  [:map
-   [:db map?]])
-
-
-(defn health
-  [{:keys []}]
-  (http/ok {:db {}}))
-
-
 (defn internal-routes
   [_opts]
-  ["/health"
-   {:get {:responses {200 {:body health-response-schema}
-                      500 {}}
-          :handler health}}])
+  [healthcheck/simple-route])
 
 
 (defn api-routes
