@@ -1,6 +1,7 @@
 (ns com.vennbilling.customer.interface
   (:require
-    [com.vennbilling.customer.core :as core]))
+    [com.vennbilling.customer.core :as core]
+    [com.vennbilling.customer.routes :as routes]))
 
 
 (defn serialize
@@ -21,3 +22,7 @@
 (defn all
   []
   [(core/find-by-id "1")])
+
+
+(def list-route routes/list-route)
+(def show-route routes/show-route)
