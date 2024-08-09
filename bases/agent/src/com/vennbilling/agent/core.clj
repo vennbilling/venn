@@ -16,8 +16,7 @@
     [reitit.ring.middleware.muuntaja :as muuntaja]
     [reitit.ring.middleware.parameters :as parameters]
     [ring.adapter.undertow :refer [run-undertow]]
-    [ring.logger :as logger]
-    [ring.util.http-response :as http]))
+    [ring.logger :as logger]))
 
 
 (defmethod aero.core/reader 'ig/ref
@@ -53,24 +52,6 @@
       (ring/create-default-handler))))
 
 
-;; TODO: This should be defined in the customer component
-(def list-response-schema [:vector venn-spec/identify-response-schema])
-(def show-response-schema venn-spec/identify-response-schema)
-
-
-(defn index
-  [_]
-  (http/ok (customer/all)))
-
-
-(defn show
-  [{{:keys [id]} :path-params}]
-  (let [c (customer/find-by-id id)]
-    (if (seq c)
-      (http/ok c)
-      (http/not-found))))
-
-
 (defn internal-routes
   [_opts]
   [healthcheck/simple-route])
@@ -79,15 +60,8 @@
 (defn api-routes
   [_opts]
   [venn-spec/identify-route
-
-   ["/customers"
-    {:get {:responses {200 {:body list-response-schema}}
-           :handler index}}]
-
-   ["/customers/:id"
-    {:get {:responses {200 {:body show-response-schema}
-                       404 {}}
-           :handler show}}]])
+   customer/list-route
+   customer/show-route])
 
 
 (defn route-data
