@@ -1,7 +1,8 @@
 (ns com.vennbilling.spec.interface-test
   (:require
     [clojure.test :as test :refer [deftest testing is]]
-    [com.vennbilling.spec.interface :as spec]))
+    [com.vennbilling.spec.interface :as spec]
+    [ring.util.http-status :as http-status]))
 
 
 (deftest testing-routes []
@@ -19,7 +20,7 @@
                       resp (handler request)
                       {:keys [status body]} resp
                       {:keys [identifier traits billing-provider]} body]
-                  (is (= 201 status))
+                  (is (= http-status/created status))
                   (is (= "a" identifier))
                   (is (= {} traits))
                   (is (nil? billing-provider))))
@@ -28,7 +29,7 @@
                       resp (handler request)
                       {:keys [status body]} resp
                       {:keys [identifier traits billing-provider]} body]
-                  (is (= 201 status))
+                  (is (= http-status/created status))
                   (is (= "a" identifier))
                   (is (= {:customer true} traits))
                   (is (nil? billing-provider))))
@@ -37,7 +38,7 @@
                       resp (handler request)
                       {:keys [status body]} resp
                       {:keys [identifier traits billing_provider]} body]
-                  (is (= 201 status))
+                  (is (= http-status/created status))
                   (is (= "a" identifier))
                   (is (= {:customer true} traits))
                   (is (= {:name "stripe"} billing_provider)))))))))))

@@ -1,7 +1,8 @@
 (ns com.vennbilling.spec.core
   (:require
     [com.vennbilling.customer.interface :as customer]
-    [ring.util.http-response :as http]))
+    [ring.util.http-response :as http]
+    [ring.util.http-status :as http-status]))
 
 
 (def ^:private valid-billing-provider-types ["stripe"])
@@ -34,5 +35,5 @@
 (def identify-route
   ["/identify"
    {:post {:parameters {:body identify-request-schema}
-           :responses {201 {:body identify-response-schema}}
+           :responses {http-status/created {:body identify-response-schema}}
            :handler identify-handler}}])

@@ -15,6 +15,7 @@
 
 
            :dev {:extra-deps {poly/spec {:local/root "components/spec"}
+                              poly/healthcheck {:local/root "components/healthcheck"}
                               poly/customer {:local/root "components/customer"}
                               poly/agent {:local/root "bases/agent"}
 
