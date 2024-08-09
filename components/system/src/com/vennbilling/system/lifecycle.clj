@@ -5,9 +5,16 @@
     [integrant.core :as ig]))
 
 
-(defonce ^:private system (atom nil))
+(defonce  system (atom nil))
 
 (def ^:private default-config-file (io/resource "system/default.edn"))
+(def ^:private default-opts {:profile :dev})
+
+
+(defn- valid-profile?
+  [profile]
+  (contains? {:prod true
+              :dev :true} profile))
 
 
 (defn- stop
@@ -21,8 +28,12 @@
   (when banner
     (println "\n" banner))
 
-  (let [f (or config-file default-config-file)]
-    (->> (c/read-config f opts)
+  (let [f (or config-file default-config-file)
+        profile (:profile opts)
+        o (if (valid-profile? profile)
+            opts
+            default-opts)]
+    (->> (c/read-config f o)
          (ig/prep)
          (ig/init)
          (reset! system)))
