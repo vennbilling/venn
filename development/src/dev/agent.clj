@@ -3,17 +3,16 @@
     [aero.core :refer [read-config]]
     [clojure.java.io :as io]
     [clojure.tools.namespace.repl :as repl]
-    [com.vennbilling.agent.core]
-    [com.vennbilling.system.interface]
+    [com.vennbilling.agent.core :refer [settings]]
     [integrant.core :as ig]
     [integrant.repl :refer [prep go halt reset init]]
     [integrant.repl.state]
     [io.pedestal.log :as log]))
 
 
-(def config-file (io/resource "../../../bases/agent/resources/agent/system.edn"))
+(def config-file (read-config (io/resource "../../../bases/agent/resources/agent/system.edn") {:profile :dev}))
 
-(integrant.repl/set-prep! #(ig/prep (read-config config-file {:profile :dev})))
+(integrant.repl/set-prep! #(ig/prep (merge-with into config-file settings)))
 (repl/set-refresh-dirs "../../../bases/agent/src")
 
 (System/setProperty "logback.statusListenerClass" "ch.qos.logback.core.status.OnConsoleStatusListener")
