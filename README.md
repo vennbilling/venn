@@ -10,4 +10,4 @@ Check out our [wiki page](https://github.com/venn-billing/agent/wiki/Overview) t
 
 This project is considered alpha and should not be used in production environments.
 
-Check out our [roadmap on the wiki page](https://github.com/venn-billing/agent/wiki/Overview) to see where things are at
+Check out our [roadmap on the wiki page](https://github.com/venn-billing/agent/wiki/Roadmap) to see where things are at
