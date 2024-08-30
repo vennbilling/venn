@@ -3,11 +3,4 @@
 
  :http/server
  {:port #long #or [#env VENN_AGENT_PORT 8080]
-  :host #or [#env VENN_AGENT_HOST "0.0.0.0"]
-  :handler #ref :handler/ring}
-
- :handler/ring
- {:router  #ref :router/ring}
-
- :router/ring
- {:base-path "/v1"}}
+  :host #or [#env VENN_AGENT_HOST "0.0.0.0"]}}
