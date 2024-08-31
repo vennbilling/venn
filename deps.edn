@@ -22,7 +22,7 @@
                               poly/server {:local/root "bases/server"}
 
                               integrant/repl {:mvn/version "0.3.3"}
-                              org.clojure/clojure {:mvn/version "1.11.1"}}
+                              org.clojure/clojure {:mvn/version "1.11.4"}}
 
                  :extra-paths ["development/src" "development/resources"]}
 
