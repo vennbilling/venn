@@ -1,20 +1,8 @@
 {:paths ["src" "resources"]
- :deps {;; configuration                          
-        aero/aero {:mvn/version "1.1.6"}
-        integrant/integrant {:mvn/version "0.8.1"}
-
-        ;; logging
+ :deps {;; logging
         org.slf4j/slf4j-api {:mvn/version "2.0.7"}
         ch.qos.logback/logback-classic {:mvn/version "1.3.11"}
         io.pedestal/pedestal.log {:mvn/version "0.7.0"}
-        ring-logger/ring-logger {:mvn/version "1.1.1"}
-
-        ;; ring + routing + validation
-        luminus/ring-undertow-adapter {:mvn/version "1.3.1"}
-        metosin/reitit-core {:mvn/version "0.7.0-alpha5"}
-        metosin/reitit-middleware {:mvn/version "0.7.0-alpha5"}
-        metosin/reitit-malli {:mvn/version "0.7.0-alpha5"}
-        metosin/reitit-ring {:mvn/version "0.7.0-alpha5"}
-        metosin/ring-http-response {:mvn/version "0.9.3"}}
+        ring-logger/ring-logger {:mvn/version "1.1.1"}}
  :aliases {:test {:extra-paths ["test"]
                   :extra-deps {}}}}
