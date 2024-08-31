@@ -1,0 +1,18 @@
+{:deps {poly/spec {:local/root "../../components/spec"}
+        poly/customer {:local/root "../../components/customer"}
+        poly/healthcheck {:local/root "../../components/healthcheck"}
+        poly/system {:local/root "../../components/system"}
+
+        poly/server {:local/root "../../bases/server"}
+
+        org.clojure/clojure {:mvn/version "1.11.1"}}
+
+ :aliases {:build {:deps {io.github.clojure/tools.build {:git/tag "v0.9.4"
+                                                         :git/sha "76b78fe"}}
+                   :ns-default build}
+
+           :test {:extra-paths []
+                  :extra-deps  {}}
+
+           :uberjar {:main com.vennbilling.server.core
+                     :version "0.0.3-alpha-SNAPSHOT"}}}

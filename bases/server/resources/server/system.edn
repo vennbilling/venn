@@ -1,0 +1,6 @@
+{:system/env #profile {:dev :dev
+                       :prod :prod}
+
+ :http/server
+ {:port #long #or [#env VENN_SERVER_PORT 8081]
+  :host #or [#env VENN_SERVER_HOST "0.0.0.0"]}}
