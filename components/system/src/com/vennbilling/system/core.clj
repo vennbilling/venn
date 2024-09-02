@@ -2,8 +2,8 @@
   (:require
     [aero.core :as aero]
     [clojure.java.io :as io]
-    [com.vennbilling.system.http :as http]
-    [io.pedestal.log :as log])
+    [com.vennbilling.logging.interface :as log]
+    [com.vennbilling.system.http :as http])
   (:import
     (java.io
       FileNotFoundException)))
@@ -24,11 +24,11 @@
       (merge config {}))
     (catch FileNotFoundException _
       ;; TODO: Log Exception
-      (log/warn :msg "invalid aero config. using default.")
+      (log/warn "invalid aero config. using default.")
       (load-defaults))
     (catch IllegalArgumentException _
       ;; TODO: Log Exception
-      (log/warn :msg "invalid aero config. using default.")
+      (log/warn "invalid aero config. using default.")
       (load-defaults))))
 
 
