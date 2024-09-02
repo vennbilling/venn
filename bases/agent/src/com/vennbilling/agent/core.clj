@@ -3,9 +3,9 @@
   (:require
     [clojure.java.io :as io]
     [com.vennbilling.healthcheck.interface :as healthcheck]
+    [com.vennbilling.logging.interface :as log]
     [com.vennbilling.spec.interface :as venn-spec]
-    [com.vennbilling.system.interface :as system]
-    [io.pedestal.log :as log]))
+    [com.vennbilling.system.interface :as system]))
 
 
 (def api-routes
@@ -23,4 +23,4 @@
   ;; TODO: Pass profile as args
   (let [agent (system/create-http config-file :prod api-routes)]
     (system/start banner agent))
-  (log/info :msg "venn agent started successfully."))
+  (log/info "venn agent started successfully."))
