@@ -3,4 +3,8 @@
 
  :http/server
  {:port 8080
-  :host "0.0.0.0"}}
+  :host "0.0.0.0"}
+
+ :db/journal
+ {:dbtype "sqlite"
+  :dbname "venn-db"}}

@@ -32,6 +32,21 @@
       (load-defaults))))
 
 
+(defn init-system
+  [config-file profile]
+  (init config-file profile))
+
+
+(defn init-http-server
+  [routes]
+  (http/server-settings routes))
+
+
+(defn with-http-server
+  [system server]
+  (merge-with into system server))
+
+
 (defn create-http
   [config-file profile routes]
 
