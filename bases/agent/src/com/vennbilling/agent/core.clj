@@ -21,6 +21,6 @@
 (defn -main
   [& _]
   ;; TODO: Pass profile as args
-  (let [agent (system/create-http config-file :prod api-routes)]
+  (let [agent (system/init config-file :prod api-routes)]
     (system/start banner agent))
   (log/info "venn agent started successfully."))

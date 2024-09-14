@@ -5,6 +5,5 @@
  {:port 8080
   :host "0.0.0.0"}
 
- :db/journal
- {:dbtype "sqlite"
-  :dbname "venn-db"}}
+ :db.server/local
+ {:dbtype "sqlite" :path "/var/db/venn"}}

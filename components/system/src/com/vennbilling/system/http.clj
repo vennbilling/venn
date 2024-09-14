@@ -12,7 +12,7 @@
     [ring.logger :as logger]))
 
 
-(def router-config
+(def ^:private router-config
   {:coercion malli/coercion
    :muuntaja m/instance
    :middleware [;; query-params & form-params
@@ -35,6 +35,7 @@
   [_ opts]
   (let [handler (atom (delay (:handler opts)))
         undertow-opts (dissoc opts :handler)]
+    (println opts)
     {:server (run-undertow (fn [req] (@@handler req)) undertow-opts)}))
 
 
@@ -55,15 +56,3 @@
 (defmethod ig/init-key :http/router
   [_ {:keys [routes]}]
   (ring/router ["" router-config routes]))
-
-
-(defn server-settings
-  [routes]
-  {:http/server
-   {:handler (ig/ref :http/handler)}
-
-   :http/handler
-   {:router (ig/ref :http/router)}
-
-   :http/router
-   {:routes routes}})
