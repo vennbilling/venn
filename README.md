@@ -1,6 +1,6 @@
 # venn
 
-The official repo for Venn, a modern billing platform.
+The official repo for Venn: a modern, self-hosted billing platform.
 
 ## What is this project?
 
