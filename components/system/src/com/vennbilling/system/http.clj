@@ -35,7 +35,6 @@
   [_ opts]
   (let [handler (atom (delay (:handler opts)))
         undertow-opts (dissoc opts :handler)]
-    (println opts)
     {:server (run-undertow (fn [req] (@@handler req)) undertow-opts)}))
 
 
