@@ -6,4 +6,7 @@
   :host "0.0.0.0"}
 
  :db.server/local
- {:dbtype "sqlite" :path "/var/db/venn"}}
+ {:dbtype "sqlite" :path "/var/db/venn"}
+
+ :db.server/remote
+ {:dbtype "mysql2"}}
