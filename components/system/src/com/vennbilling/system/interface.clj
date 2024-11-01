@@ -4,11 +4,11 @@
     [com.vennbilling.system.lifecycle :as lifecycle]))
 
 
-(defn create-http
-  [config-file profile routes]
-  (core/create-http config-file profile routes))
-
-
 (defn start
   [banner system]
   (lifecycle/start banner system))
+
+
+(defn init
+  [config profile routes]
+  (core/init config profile routes))
