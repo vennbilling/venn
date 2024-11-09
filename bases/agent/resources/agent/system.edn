@@ -6,5 +6,10 @@
   :host #or [#env VENN_AGENT_HOST "0.0.0.0"]}
 
 
- :db/local
- {:connection #or [#env VENN_AGENT_LOCAL_DB_CONNECTION "test"]}}
+ :db/server
+ {:dbtype "postgresql"
+  :dbname #or [#env VENN_AGENT_DB_NAME "venn_agent_development"]
+  :host #or [#env VENN_AGENT_DB_HOST :none]
+  :port #or [#env VENN_AGENT_DB_PORT :none]
+  :user #or [#env VENN_AGENT_DB_USER ""]
+  :password #or [#env VENN_AGENT_DB_PASSWORD "password"]}}

@@ -14,15 +14,14 @@
 (def ^:private defaults (aero/read-config default-config {:profile :dev}))
 
 
-(def ^:private system-settings
+(def ^:private ig-settings
+  "Settings that will leverage integrant.core on system start. Used to also configure system dependencies."
   {:http/server
-   {:handler (ig/ref :http/handler)}
+   {:handler (ig/ref :http/handler)
+    :db (ig/ref :db/server)}
 
    :http/handler
-   {:router (ig/ref :http/router)}
-
-   :http/router
-   {:routes []}})
+   {:router (ig/ref :http/router)}})
 
 
 (defn- read-config
@@ -45,5 +44,5 @@
 
   (let [config (read-config config-file profile)
         router {:http/router {:routes routes}}
-        system (merge-with into config system-settings router)]
+        system (merge-with into config ig-settings router)]
     system))
