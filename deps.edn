@@ -19,6 +19,7 @@
                               poly/customer {:local/root "components/customer"}
                               poly/system {:local/root "components/system"}
                               poly/logging {:local/root "components/logging"}
+                              poly/database {:local/root "components/database"}
 
                               poly/agent {:local/root "bases/agent"}
                               poly/server {:local/root "bases/server"}
