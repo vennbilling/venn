@@ -5,8 +5,10 @@
  {:port 8080
   :host "0.0.0.0"}
 
- :db/local
- {:connection ""}
-
  :db/server
- {:connection ""}}
+ {:dbtype "postgresql"
+  :dbname "venn_development"
+  :host :none
+  :port :none
+  :user "venn_development"
+  :password "password"}}

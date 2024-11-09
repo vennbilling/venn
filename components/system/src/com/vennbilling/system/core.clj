@@ -3,6 +3,7 @@
     [aero.core :as aero]
     [clojure.java.io :as io]
     [com.vennbilling.logging.interface :as log]
+    [com.vennbilling.system.db]
     [com.vennbilling.system.http]
     [integrant.core :as ig])
   (:import
