@@ -5,6 +5,6 @@
  {:port #long #or [#env VENN_AGENT_PORT 8080]
   :host #or [#env VENN_AGENT_HOST "0.0.0.0"]}
 
- :db.server/local
- {:dbtype "sqlite"
-  :path  #or [#env VENN_LOCALDB_PATH "/var/db/venn"]}}
+
+ :db/local
+ {:connection #or [#env VENN_AGENT_LOCAL_DB_CONNECTION "test"]}}

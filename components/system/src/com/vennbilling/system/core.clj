@@ -16,31 +16,13 @@
 
 (def ^:private system-settings
   {:http/server
-   {:handler (ig/ref :http/handler)
-    :db (ig/refset :db/server)}
+   {:handler (ig/ref :http/handler)}
 
    :http/handler
    {:router (ig/ref :http/router)}
 
    :http/router
-   {:routes []}
-
-   :db.server/local {}
-   :db.server/remote {}})
-
-
-(derive :db.server/local :db/server)
-(derive :db.server/mysql :db/server)
-
-
-(defmethod ig/init-key :db.server/local
-  [_ opts]
-  {:sqlite opts})
-
-
-(defmethod ig/init-key :db.server/remote
-  [_ opts]
-  {:mysql opts})
+   {:routes []}})
 
 
 (defn- read-config
