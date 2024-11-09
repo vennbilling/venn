@@ -2,14 +2,14 @@
                        :prod :prod}
 
  :http/server
- {:port #long #or [#env VENN_AGENT_PORT 8080]
-  :host #or [#env VENN_AGENT_HOST "0.0.0.0"]}
+ {:port 8080
+  :host "0.0.0.0"}
 
 
  :db/server
  {:dbtype "postgresql"
-  :dbname #or [#env VENN_AGENT_DB_NAME "venn_agent_development"]
-  :host #or [#env VENN_AGENT_DB_HOST :none]
-  :port #or [#env VENN_AGENT_DB_PORT :none]
-  :user #or [#env VENN_AGENT_DB_USER ""]
-  :password #or [#env VENN_AGENT_DB_PASSWORD "password"]}}
+  :dbname #env VENN_AGENT_DB_NAME
+  :host #env VENN_AGENT_DB_HOST
+  :port #env VENN_AGENT_DB_PORT
+  :user #env VENN_AGENT_DB_USER
+  :password #env VENN_AGENT_DB_PASSWORD}}
