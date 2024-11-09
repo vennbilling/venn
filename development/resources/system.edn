@@ -5,8 +5,8 @@
  {:port 8080
   :host "0.0.0.0"}
 
- :db.server/local
- {:dbtype "sqlite" :path "/var/db/venn"}
+ :db/local
+ {:connection ""}
 
- :db.server/remote
- {:dbtype "mysql2"}}
+ :db/server
+ {:connection ""}}

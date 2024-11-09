@@ -31,7 +31,6 @@
 
 ;; In development, Venn is a single service with all the routes
 (def routes (conj [base-path] all-routes))
-
 (def venn (system/init config-file profile routes))
 
 (integrant.repl/set-prep! #(ig/prep venn))
