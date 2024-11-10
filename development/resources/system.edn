@@ -8,7 +8,7 @@
  :db/server
  {:dbtype "postgresql"
   :dbname "venn_development"
-  :host :none
-  :port :none
+  :host "0.0.0.0"
+  :port 5432
   :user "venn_development"
   :password "password"}}

@@ -1,10 +1,11 @@
 (ns com.vennbilling.system.db
-  [:require [integrant.core :as ig]])
+  (:require [integrant.core :as ig]
+            [next.jdbc :as jdbc]))
 
-
-;; TODO: init-key for db/local and db/server
 (defmethod ig/init-key :db/server
-  [_ opts])
+  [_ db]
+  (let [ds (jdbc/get-datasource db)
+        db-conn (jdbc/get-connection ds)]
+    {:db-conn db-conn}))
 
-
-(defmethod ig/halt-key! :db/server [_ {:keys [server]}])
+(defmethod ig/halt-key! :db/server [_ _])
