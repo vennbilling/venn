@@ -5,8 +5,10 @@
  {:port 8080
   :host "0.0.0.0"}
 
- :db.server/local
- {:dbtype "sqlite" :path "/var/db/venn"}
-
- :db.server/remote
- {:dbtype "mysql2"}}
+ :db/server
+ {:dbtype "postgresql"
+  :dbname "venn_development"
+  :host "0.0.0.0"
+  :port 5432
+  :user "venn_development"
+  :password "password"}}

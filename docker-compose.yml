@@ -1,0 +1,10 @@
+services:
+  venn_agent_db:
+    container_name: venn_agent_db
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: venn_development
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5432

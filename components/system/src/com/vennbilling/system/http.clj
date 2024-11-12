@@ -35,6 +35,7 @@
   [_ opts]
   (let [handler (atom (delay (:handler opts)))
         undertow-opts (dissoc opts :handler)]
+    ;; TODO: Dependency injection of localdb and serverdb
     {:server (run-undertow (fn [req] (@@handler req)) undertow-opts)}))
 
 
