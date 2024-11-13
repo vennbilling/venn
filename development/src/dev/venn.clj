@@ -1,7 +1,9 @@
 (ns dev.venn
   (:require
+   [aero.core :as aero]
    [clojure.java.io :as io]
    [clojure.tools.namespace.repl :as repl]
+   [clojure.pprint :refer [pprint]]
    [com.vennbilling.customer.interface :as customer]
    [com.vennbilling.healthcheck.interface :as healthcheck]
    [com.vennbilling.spec.interface :as venn-spec]
@@ -10,27 +12,36 @@
    [integrant.repl :refer [prep go halt reset init]]
    [integrant.repl.state]))
 
-(def config-file (io/resource "system.edn"))
-
-;; TODO: We should leverage profile in juxt.aero more instead of having a system.edn file for the dev project
 (def profile :dev)
+
+;; In development, Venn is a single monolith service with all the routes
+;; We also generate the system.edn on the by merging all the bases' configs
+(def agent-config-file (io/resource "../../../bases/agent/resources/agent/system.edn"))
+(def server-config-file (io/resource "../../../bases/server/resources/server/system.edn"))
+
+(defn gen-service-config-file
+  "Generate a config for the venn monolith and write it to system.edn"
+  []
+  (let [agent-config (aero/read-config agent-config-file {:profile profile})
+        server-config (aero/read-config server-config-file {:profile profile})
+        mono-config (merge server-config agent-config)]
+    (pprint mono-config (io/writer "development/resources/system.edn"))
+    (io/resource "system.edn")))
+
 (def base-path "/v1")
-
 (def agent-routes
-  [venn-spec/identify-route
-   healthcheck/simple-route])
-
+  [venn-spec/identify-route])
 (def server-routes
   [customer/list-route
    customer/show-route])
+(def internal-routes
+  [healthcheck/simple-route])
+(def routes (conj [base-path] (apply conj agent-routes server-routes internal-routes)))
 
-(def all-routes (apply conj agent-routes server-routes))
+(integrant.repl/set-prep! #(-> (gen-service-config-file)
+                               (system/init profile routes)
+                               (ig/prep)))
 
-;; In development, Venn is a single service with all the routes
-(def routes (conj [base-path] all-routes))
-(def venn (system/init config-file profile routes))
-
-(integrant.repl/set-prep! #(ig/prep venn))
 (repl/set-refresh-dirs "../../../components")
 
 ;; Helpers to start and stop the monolith

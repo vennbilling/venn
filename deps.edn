@@ -13,7 +13,6 @@
                                "--middleware" "[cider.nrepl/cider-middleware]"
                                "-i"]}
 
-
            :dev {:extra-deps {poly/spec {:local/root "components/spec"}
                               poly/healthcheck {:local/root "components/healthcheck"}
                               poly/customer {:local/root "components/customer"}

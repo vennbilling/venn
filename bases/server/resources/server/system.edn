@@ -2,5 +2,7 @@
                        :prod :prod}
 
  :http/server
- {:port 8081
-  :host "0.0.0.0"}}
+ {:host #profile {:dev "0.0.0.0"
+                  :prod #env VENN_SERVER_HTTP_HOST}
+  :port #profile {:dev 8080
+                  :prod #env VENN_SERVER_HTTP_PORT}}}
