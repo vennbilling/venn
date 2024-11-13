@@ -3,8 +3,10 @@
                        :prod :prod}
 
  :http/server
- {:port 8080
-  :host "0.0.0.0"}
+ {:host #profile {:dev "0.0.0.0"
+                  :prod #env VENN_AGENT_HTTP_HOST}
+  :port #profile {:dev 8080
+                  :prod #env VENN_AGENT_HTTP_PORT}}
 
  :db/server
  {:dbtype "postgresql"
