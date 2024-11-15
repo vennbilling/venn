@@ -30,7 +30,9 @@
 
            :test {:extra-paths ["components/customer/test"]}
 
-           :migrate {:extra-deps {com.github.vennbilling/clj-migratus {:git/sha "4ecd8c1db3ae58709a0de7d551781e86fb247826"}}}
+           :migrate {:extra-deps {com.github.vennbilling/clj-migratus {:git/sha "4ecd8c1db3ae58709a0de7d551781e86fb247826"}}
+                     :jvm-opts ["-Dmigratus.config.path=components/database/resources"]
+                     :main-opts ["-m" "clj-migratus"]}
 
            :poly {:main-opts ["-m" "polylith.clj.core.poly-cli.core"]
                   :extra-deps {polylith/clj-poly {:mvn/version "0.2.20"}}}}}
