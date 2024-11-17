@@ -14,5 +14,4 @@ pom.xml.asc
 log
 1
 projects/**/target
-
-./development/resources/system.edn
+development/resources/system.edn
