@@ -1,0 +1,2 @@
+.clj-kondo/**/*.edn linguist-documentation
+.clj-kondo/**/*.clj_kondo linguist-documentation
