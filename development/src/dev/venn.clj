@@ -10,8 +10,7 @@
    [com.vennbilling.system.interface :as system]
    [integrant.core :as ig]
    [integrant.repl :refer [prep go halt reset init]]
-   [integrant.repl.state :as s]
-   [migratus.core :as migratus]))
+   [integrant.repl.state :as s]))
 
 (def profile :dev)
 
