@@ -56,14 +56,3 @@
   (go)
   (halt)
   (reset))
-
-(def migrations-config (-> integrant.repl.state/system
-                           (:db/server)
-                           (or {})))
-
-;; Helpers to run migrations
-(comment
-  (migratus/init migrations-config)
-  (migratus/create migrations-config "create-events")
-  (migratus/migrate migrations-config)
-  (migratus/rollback migrations-config))
