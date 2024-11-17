@@ -26,9 +26,9 @@
         config (init-connection-pool-config url)
         ds (new HikariDataSource config)
         conn (jdbc/get-connection ds)]
-    {:db {:datasource ds
-          :connection conn}
-     :migrations migrations}))
+    (into {:db {:datasource ds
+                :connection conn}}
+          migrations)))
 
 (defmethod ig/halt-key! :db/server [_ {:keys [db]}]
   (let [{:keys [datasource]} db]

@@ -10,7 +10,8 @@
    [com.vennbilling.system.interface :as system]
    [integrant.core :as ig]
    [integrant.repl :refer [prep go halt reset init]]
-   [integrant.repl.state :as s]))
+   [integrant.repl.state :as s]
+   [migratus.core :as migratus]))
 
 (def profile :dev)
 
@@ -56,3 +57,13 @@
   (halt)
   (reset))
 
+(def migrations-config (-> integrant.repl.state/system
+                           (:db/server)
+                           (or {})))
+
+;; Helpers to run migrations
+(comment
+  (migratus/init migrations-config)
+  (migratus/create migrations-config "create-events")
+  (migratus/migrate migrations-config)
+  (migratus/rollback migrations-config))
