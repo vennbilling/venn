@@ -10,7 +10,7 @@
    [com.vennbilling.system.interface :as system]
    [integrant.core :as ig]
    [integrant.repl :refer [prep go halt reset init]]
-   [integrant.repl.state]))
+   [integrant.repl.state :as s]))
 
 (def profile :dev)
 
@@ -46,10 +46,12 @@
 
 ;; Helpers to start and stop the monolith
 (comment
+  (gen-service-config-file)
   (prep)
+  (eval integrant.repl.state/config)
   (init)
-  integrant.repl.state/config
   integrant.repl.state/system
   (go)
   (halt)
   (reset))
+
