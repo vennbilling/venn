@@ -14,7 +14,7 @@
     config))
 
 (defmethod ig/init-key :db/server
-  [_ {:keys [db migrations]}]
+  [_ {:keys [db]}]
   (prn db)
   (let [url (jdbc-url db)
         config (init-connection-pool-config url)
@@ -22,8 +22,7 @@
         conn (jdbc/get-connection ds)]
     (into {:db {:datasource ds
                 :connection conn}}
-          migrations)))
-
+          db)))
 (defmethod ig/halt-key! :db/server [_ {:keys [db]}]
   (let [{:keys [datasource]} db]
     (.close datasource)))

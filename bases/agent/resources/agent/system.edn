@@ -24,8 +24,8 @@
                            :prod #env VENN_AGENT_DB_USER}
        :password #profile {:dev "password"
                            :test "password"
-                           :prod #env VENN_AGENT_DB_PASSWORD}}
+                           :prod #env VENN_AGENT_DB_PASSWORD}
 
-  :migrations {:store :database
-               :migrations-dir "components/database/resources/database/migrations"
-               :migrations-table-name "schema_migrations"}}}
+       :store :database
+       :migration-dir "../components/database/resources/database/migrations"
+       :migration-table-name "schema_migrations"}}}

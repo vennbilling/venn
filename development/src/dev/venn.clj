@@ -10,7 +10,8 @@
    [com.vennbilling.system.interface :as system]
    [integrant.core :as ig]
    [integrant.repl :refer [prep go halt reset init]]
-   [integrant.repl.state :as s]))
+   [integrant.repl.state :as s]
+   [migratus.core :as migratus]))
 
 (def profile :dev)
 
@@ -45,13 +46,23 @@
 
 (repl/set-refresh-dirs "../../../components")
 
+(def migratus-cfg (if-let [db (-> s/system
+                                  (:db/server))]
+                    db
+                    {}))
+
 ;; Helpers to start and stop the monolith
 (comment
   (gen-service-config-file)
   (prep)
-  (eval integrant.repl.state/config)
   (init)
-  integrant.repl.state/system
+  s/system
+  migratus-cfg
   (go)
   (halt)
   (reset))
+
+;; DB-related operations
+(comment
+  (migratus/init migratus-cfg))
+
