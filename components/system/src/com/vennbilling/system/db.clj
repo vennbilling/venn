@@ -30,4 +30,6 @@
           :connection conn}
      :migrations migrations}))
 
-(defmethod ig/halt-key! :db/conn [_ _])
+(defmethod ig/halt-key! :db/server [_ {:keys [db]}]
+  (let [{:keys [datasource]} db]
+    (.close datasource)))
