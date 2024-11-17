@@ -25,6 +25,7 @@
   (let [agent-config (aero/read-config agent-config-file {:profile profile})
         server-config (aero/read-config server-config-file {:profile profile})
         mono-config (merge server-config agent-config)]
+    ;; This file is in .gitignore
     (pprint mono-config (io/writer "development/resources/system.edn"))
     (io/resource "system.edn")))
 

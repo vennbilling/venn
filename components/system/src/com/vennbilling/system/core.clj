@@ -15,9 +15,8 @@
 
 (def ^:private ig-settings
   "Settings that will leverage integrant.core on system start. Used to also configure system dependencies."
-  {:http/server
-   {:handler (ig/ref :http/handler)
-    :db (ig/ref :db/server)}
+  {:http/server {:handler (ig/ref :http/handler)
+                 :db (ig/ref :db/server)}
 
    :http/handler
    {:router (ig/ref :http/router)}})

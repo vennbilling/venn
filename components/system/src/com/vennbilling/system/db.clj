@@ -6,6 +6,13 @@
   (:import (com.zaxxer.hikari HikariConfig
                               HikariDataSource)))
 
+(def ^:private migrations-store :database)
+(def ^:private migrations-dir "components/database/resources/database/migrations")
+(def ^:private migrations-table-name "schema_versions")
+(def ^:private migrations {:store migrations-store
+                           :migrations-dir migrations-dir
+                           :migration-table-name migrations-table-name})
+
 (defn- init-connection-pool-config
   [url]
   (let [config (new HikariConfig)]
@@ -14,11 +21,13 @@
     config))
 
 (defmethod ig/init-key :db/server
-  [_ db-spec]
-  (let [url (jdbc-url db-spec)
+  [_ opts]
+  (let [url (jdbc-url opts)
         config (init-connection-pool-config url)
         ds (new HikariDataSource config)
         conn (jdbc/get-connection ds)]
-    {:db-conn conn}))
+    {:db {:datasource ds
+          :connection conn}
+     :migrations migrations}))
 
-(defmethod ig/halt-key! :db/server [_ _])
+(defmethod ig/halt-key! :db/conn [_ _])
