@@ -4,8 +4,10 @@
 
  :http/server
  {:host #profile {:dev "0.0.0.0"
+                  :test "0.0.0.0"
                   :prod #env VENN_AGENT_HTTP_HOST}
   :port #profile {:dev 8080
+                  :test 8080
                   :prod #env VENN_AGENT_HTTP_PORT}}
 
  :db/server
@@ -26,6 +28,11 @@
                            :test "password"
                            :prod #env VENN_AGENT_DB_PASSWORD}
 
+       ;; Migration-related configs
        :store :database
        :migration-dir "../components/database/resources/database/migrations"
-       :migration-table-name "schema_migrations"}}}
+       :migration-table-name "schema_migrations"
+       ;; Managed connections allow migration commands to re-use the same connection
+       :managed-connection? #profile {:dev true
+                                      :test true
+                                      :prod false}}}}

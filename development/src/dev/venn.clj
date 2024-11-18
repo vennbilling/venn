@@ -51,18 +51,24 @@
                     db
                     {}))
 
+;; Config states.
+(comment
+  s/system
+  migratus-cfg)
+
 ;; Helpers to start and stop the monolith
 (comment
-  (gen-service-config-file)
   (prep)
   (init)
-  s/system
-  migratus-cfg
   (go)
   (halt)
   (reset))
 
 ;; DB-related operations
 (comment
-  (migratus/init migratus-cfg))
+  (migratus/init migratus-cfg)
+  ;;(migratus/create migratus-cfg "migration_name")
+  (migratus/pending-list migratus-cfg)
+  (migratus/migrate migratus-cfg)
+  (migratus/rollback migratus-cfg))
 

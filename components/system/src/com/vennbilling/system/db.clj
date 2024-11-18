@@ -15,14 +15,16 @@
 
 (defmethod ig/init-key :db/server
   [_ {:keys [db]}]
-  (prn db)
-  (let [url (jdbc-url db)
+  (let [{:keys [managed-connection?]} db
+        migration-dir-config (dissoc db :managed-connection?)
+        url (jdbc-url db)
         config (init-connection-pool-config url)
         ds (new HikariDataSource config)
         conn (jdbc/get-connection ds)]
-    (into {:db {:datasource ds
-                :connection conn}}
-          db)))
+    (into {:db {:datasource (.getConnection ds)
+                :connection conn
+                :managed-connection? managed-connection?}}
+          migration-dir-config)))
 (defmethod ig/halt-key! :db/server [_ {:keys [db]}]
   (let [{:keys [datasource]} db]
     (.close datasource)))
