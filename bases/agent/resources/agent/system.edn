@@ -32,6 +32,10 @@
        :store :database
        :migration-dir "../components/database/resources/database/migrations"
        :migration-table-name "schema_migrations"
+       ;; Script to initialize the DB
+       :init-script #profile {:dev "schema.sql"
+                              :test "schema.sql"
+                              :prod nil}
        ;; Managed connections allow migration commands to re-use the same connection
        :managed-connection? #profile {:dev true
                                       :test true
