@@ -24,7 +24,9 @@
                               poly/server {:local/root "bases/server"}
 
                               integrant/repl {:mvn/version "0.3.3"}
-                              org.clojure/clojure {:mvn/version "1.12.0"}}
+                              org.clojure/clojure {:mvn/version "1.12.0"}
+
+                              migratus/migratus {:mvn/version "1.6.3"}}
 
                  :extra-paths ["development/src" "development/resources"]}
 

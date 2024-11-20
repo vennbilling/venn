@@ -5,4 +5,10 @@
                   :task (clojure {:dir "."} "-M:dev:repl")}
 
          test     {:doc  "starts a test environment and repl"
-                   :task (clojure {:dir "."} "-M:test:repl")}}}
+                   :task (clojure {:dir "."} "-M:test:repl")}
+
+         psql-dev {:doc "opens a connection to the development database"
+                   :task (shell "psql -h 0.0.0.0 -d venn_development -U venn")}
+
+         psql-test {:doc "opens a connection to the test database"
+                    :task (shell "psql -h 0.0.0.0 -d venn_test -U venn -p 5433")}}}

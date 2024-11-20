@@ -10,7 +10,8 @@
    [com.vennbilling.system.interface :as system]
    [integrant.core :as ig]
    [integrant.repl :refer [prep go halt reset init]]
-   [integrant.repl.state]))
+   [integrant.repl.state :as s]
+   [migratus.core :as migratus]))
 
 (def profile :dev)
 
@@ -25,6 +26,7 @@
   (let [agent-config (aero/read-config agent-config-file {:profile profile})
         server-config (aero/read-config server-config-file {:profile profile})
         mono-config (merge server-config agent-config)]
+    ;; This file is in .gitignore
     (pprint mono-config (io/writer "development/resources/system.edn"))
     (io/resource "system.edn")))
 
@@ -44,12 +46,29 @@
 
 (repl/set-refresh-dirs "../../../components")
 
+(def migratus-cfg (if-let [db (-> s/system
+                                  (:db/server))]
+                    db
+                    {}))
+
+;; Config states.
+(comment
+  s/system
+  migratus-cfg)
+
 ;; Helpers to start and stop the monolith
 (comment
   (prep)
   (init)
-  integrant.repl.state/config
-  integrant.repl.state/system
   (go)
   (halt)
   (reset))
+
+;; DB-related operations
+(comment
+  (migratus/init migratus-cfg)
+  ;;(migratus/create migratus-cfg "migration_name")
+  (migratus/pending-list migratus-cfg)
+  (migratus/migrate migratus-cfg)
+  (migratus/rollback migratus-cfg))
+
