@@ -4,26 +4,22 @@
 
             [com.vennbilling.logging.interface :as l])
 
-  (:import (com.zaxxer.hikari HikariConfig
-                              HikariDataSource)))
-
-(defn- init-connection-pool-config
-  [url]
-  (let [^HikariConfig config (new HikariConfig)]
-    (-> config
-        (.setJdbcUrl url))
-    config))
+  (:import [com.zaxxer.hikari HikariDataSource]
+           [java.sql Connection SQLException]))
 
 (defmethod ig/init-key :db/server
   [_ {:keys [db]}]
   (let [{:keys [managed-connection?]} db
         migration-dir-config (dissoc db :managed-connection?)
         url (jdbc-url db)
-        config (init-connection-pool-config url)]
+        ^HikariDataSource ds (new HikariDataSource)]
+
+    ;; Configure the datastore
+    (-> ds
+        (.setJdbcUrl url))
 
     (try
-      (let [^HikariDataSource ds (new HikariDataSource config)
-            test-conn (.getConnection ds)]
+      (let [^Connection test-conn (.getConnection ds)]
         (l/info "Database connection healthy")
         (.close test-conn)
 
@@ -32,7 +28,7 @@
         (into {:db {:datasource ds
                     :managed-connection? managed-connection?}}
               migration-dir-config))
-      (catch Exception e
+      (catch SQLException e
         (l/warn (str "Failed to connect to database. err: " e))
         (throw e)))))
 
