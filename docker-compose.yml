@@ -1,7 +1,7 @@
 services:
   venn_development_db:
     container_name: venn_development_db
-    image: postgres
+    image: postgres:16
     restart: always
     environment:
       POSTGRES_USER: venn
@@ -11,7 +11,7 @@ services:
       - 5432:5432
   venn_test_db:
     container_name: venn_test_db
-    image: postgres
+    image: postgres:16
     restart: always
     environment:
       POSTGRES_USER: venn
