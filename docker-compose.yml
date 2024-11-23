@@ -17,5 +17,7 @@ services:
       POSTGRES_USER: venn
       POSTGRES_DB: venn_test
       POSTGRES_PASSWORD: password
+    volumes:
+      - ./tmp/data:/var/lib/postgrsql/data
     ports:
       - 5433:5432
