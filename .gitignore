@@ -15,3 +15,5 @@ log
 1
 projects/**/target
 development/resources/system.edn
+
+/tmp
