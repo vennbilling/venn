@@ -3,7 +3,7 @@ name: New Epic
 about: Create a new epic to capture feature work
 title: ''
 labels: ''
-assignees: ''
+assignees: bryanmikaelian
 
 ---
 

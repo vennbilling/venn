@@ -1,5 +1,5 @@
 ---
-name: Work Item
+name: New Work Item
 about: This is a general task that can be related to a bug or epic
 title: ''
 labels: ''
