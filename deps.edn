@@ -8,7 +8,7 @@
                    :ns-default build}
 
            :repl {:extra-deps {nrepl/nrepl       {:mvn/version "1.0.0"}
-                               cider/cider-nrepl {:mvn/version "0.34.0"}}
+                               cider/cider-nrepl {:mvn/version "0.52.1"}}
                   :main-opts  ["-m" "nrepl.cmdline"
                                "--middleware" "[cider.nrepl/cider-middleware]"
                                "-i"]}
