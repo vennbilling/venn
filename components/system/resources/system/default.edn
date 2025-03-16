@@ -1,1 +1,5 @@
-{:system/env :dev}
+{:system/env :unknown
+
+ :system/server {}
+
+ :system/storage {}}

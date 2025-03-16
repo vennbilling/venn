@@ -1,9 +1,7 @@
 (ns dev.venn
   (:require
-   [aero.core :as aero]
    [clojure.java.io :as io]
    [clojure.tools.namespace.repl :as repl]
-   [clojure.pprint :refer [pprint]]
    [com.vennbilling.customer.interface :as customer]
    [com.vennbilling.healthcheck.interface :as healthcheck]
    [com.vennbilling.spec.interface :as venn-spec]
@@ -13,34 +11,19 @@
    [integrant.repl.state :as s]
    [migratus.core :as migratus]))
 
-(def profile :dev)
-
-;; In development, Venn is a single monolith service with all the routes
-;; We also generate the system.edn on the by merging all the bases' configs
-(def agent-config-file (io/resource "../../../bases/agent/resources/agent/system.edn"))
-(def server-config-file (io/resource "../../../bases/server/resources/server/system.edn"))
-
-(defn gen-service-config-file
-  "Generate a config for the venn monolith and write it to system.edn"
-  []
-  (let [agent-config (aero/read-config agent-config-file {:profile profile})
-        server-config (aero/read-config server-config-file {:profile profile})
-        mono-config (merge server-config agent-config)]
-    ;; This file is in .gitignore
-    (pprint mono-config (io/writer "development/resources/system.edn"))
-    (io/resource "system.edn")))
-
+;; In development, Venn is a single monolith service with all the routes across all services joined togehter
+(def profile :development)
+(def mono-config (io/resource "system.edn"))
 (def base-path "/v1")
-(def agent-routes
-  [venn-spec/identify-route])
-(def server-routes
-  [customer/list-route
-   customer/show-route])
-(def internal-routes
-  [healthcheck/simple-route])
-(def routes (conj [base-path] (apply conj agent-routes server-routes internal-routes)))
+(def routes
+  [base-path
+   [venn-spec/identify-route
+    customer/list-route
+    customer/show-route
+    healthcheck/simple-route]])
 
-(integrant.repl/set-prep! #(-> (gen-service-config-file)
+;; Configure Integrant REPL
+(integrant.repl/set-prep! #(-> mono-config
                                (system/init profile routes)
                                (ig/prep)))
 
@@ -51,7 +34,7 @@
                     db
                     {}))
 
-;; Config states.
+;; Config states for easy inspection
 (comment
   s/system
   migratus-cfg)
@@ -64,7 +47,7 @@
   (halt)
   (reset))
 
-;; DB-related operations
+;; Helpers for DB-related operations
 (comment
   (migratus/init migratus-cfg)
   ;;(migratus/create migratus-cfg "migration_name")

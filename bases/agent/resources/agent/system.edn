@@ -1,42 +1,20 @@
-{:system/env #profile {:dev :dev
-                       :test :test
+{:system/env #profile {:development :development
                        :prod :prod}
 
- :http/server
- {:host #profile {:dev "0.0.0.0"
-                  :test "0.0.0.0"
+ :system/server
+ {:host #profile {:development "0.0.0.0"
                   :prod #env VENN_AGENT_HTTP_HOST}
-  :port #profile {:dev 8080
-                  :test 8080
+  :port #profile {:development 8080
                   :prod #env VENN_AGENT_HTTP_PORT}}
 
- :db/server
- {:db {:dbtype "postgresql"
-       :dbname #profile   {:dev "venn_development"
-                           :test "venn_test"
-                           :prod #env VENN_AGENT_DB_NAME}
-       :host #profile     {:dev "0.0.0.0"
-                           :test "0.0.0.0"
-                           :prod #env VENN_AGENT_DB_HOST}
-       :port #profile     {:dev 5432
-                           :test 5433
-                           :prod #env VENN_AGENT_DB_PORT}
-       :user #profile     {:dev "venn"
-                           :test "venn"
-                           :prod #env VENN_AGENT_DB_USER}
-       :password #profile {:dev "password"
-                           :test "password"
-                           :prod #env VENN_AGENT_DB_PASSWORD}
-
-       ;; Migration-related configs
-       :store :database
-       :migration-dir "../components/database/resources/database/migrations"
-       :migration-table-name "schema_migrations"
-       ;; Script to initialize the DB
-       :init-script #profile {:dev "schema.sql"
-                              :test "schema.sql"
-                              :prod nil}
-       ;; Managed connections allow migration commands to re-use the same connection
-       :managed-connection? #profile {:dev true
-                                      :test true
-                                      :prod false}}}}
+ :system/storage
+ {:storage.type/postgresql {:database_name #profile {:development "venn_agent_development"
+                                                     :prod #env VENN_AGENT_DB_NAME}
+                            :host #profile {:development "0.0.0.0"
+                                            :prod #env VENN_AGENT_DB_HOST}
+                            :port #profile {:development 5432
+                                            :prod #env VENN_AGENT_DB_PORT}
+                            :user #profile {:development "venn"
+                                            :prod #env VENN_AGENT_DB_USER}
+                            :password #profile {:development "password"
+                                                :prod #env VENN_AGENT_DB_PASSWORD}}}}

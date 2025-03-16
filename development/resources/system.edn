@@ -1,0 +1,17 @@
+{:system/env #profile {:development :development
+                       :test :test}
+
+ :system/server
+ {:host "0.0.0.0"
+  :port 8080}
+
+ :system/storage
+ {:storage.type/postgresql {:database_name #profile {:development "venn_development"
+                                                     :test "venn_test"}
+                            :host "0.0.0.0"
+                            :port #profile {:development 5432
+                                            :test 5433}
+                            :user "venn"
+                            :password "password"}}}
+
+u
