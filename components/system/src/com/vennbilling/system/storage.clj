@@ -1,8 +1,7 @@
 (ns com.vennbilling.system.storage
   (:require [integrant.core :as ig]
-            [next.jdbc.connection :refer [jdbc-url]]
-
             [malli.core :as m]
+            [next.jdbc.connection :refer [jdbc-url]]
 
             [com.vennbilling.logging.interface :as log])
 
@@ -13,6 +12,7 @@
 
 ;; Supported Storage Engines
 (derive :storage.type/postgresql :db/connection)
+(derive :storage.type/sqlite :db/connection)
 
 (def ^:private storage-config
   {:system/storage (ig/refset :storage/type)})
@@ -25,42 +25,57 @@
   [_ stores]
   stores)
 
+(def ^:private DBMigrationsConfig
+  [:map
+   [:directory :string]
+   [:managed-connection :boolean]])
+
 (def ^:private DBConfig
   [:map
    {:closed true}
-   [:database_name :string]
-   [:host :string]
-   [:port :int]
-   [:user :string]
-   [:password :string]])
+   [:database-name :string]
+   [:host {:optional true} :string]
+   [:port {:optional true} :int]
+   [:user {:optional true} :string]
+   [:password {:optional true} :string]
+   [:migrations DBMigrationsConfig]])
 
 (defn- build-jdbc-url
   [dbtype config]
-  (let [{:keys [database_name]} config
-        conn (dissoc config :database_name)
-        db (assoc conn :dbname database_name :dbtype dbtype)]
+  (let [{:keys [database-name]} config
+        conn (dissoc config :database-name)
+        db (assoc conn :dbname database-name :dbtype dbtype)]
     (jdbc-url db)))
 
+(defn- build-migrations-config
+  "Returns a map that represents a configuration used by migratus.core"
+  [^HikariDataSource datasource {:keys [directory managed-connection]}]
+  {:migration-dir directory
+   :db {:datasource datasource
+        :managed-connection? managed-connection}})
+
 (defmethod ig/init-key :db/connection
-  [storage-type db-config]
+  [storage-type {:keys [migrations] :as db-config}]
 
   (try
-    (let [valid (m/coerce DBConfig db-config)
-          url (build-jdbc-url (name storage-type) valid)
+    (let [valid-db-config (m/coerce DBConfig db-config)
+          dbtype (name storage-type)
+          db (dissoc valid-db-config :migrations)
+          jdbc-url (build-jdbc-url dbtype db)
           ^HikariDataSource ds (new HikariDataSource)]
 
       ;; Configure the datastore
       (-> ds
-          (.setJdbcUrl url))
+          (.setJdbcUrl jdbc-url))
 
+      ;; Test DB Connection
       (let [^Connection test-conn (.getConnection ds)]
-        (log/info "Database connection healthy")
+        (log/info (str "Database connection to " dbtype " is healthy"))
         (.close test-conn)
 
-      ;; TODO Need to configure Migratus
-      ;; https://github.com/vennbilling/venn/issues/55
-
-        {:datasource ds}))
+        ;; Configure Migrations
+        (let [migratus-config (build-migrations-config ds migrations)]
+          {:datasource ds :migrations-config migratus-config})))
     (catch ExceptionInfo e
       (log/exception e)
       (throw (IllegalArgumentException. (ex-message e))))
@@ -69,6 +84,7 @@
       (throw e))))
 
 (defmethod ig/halt-key! :db/connection
-  [_ db]
+  [storage-type db]
   (when-let [{:keys [datasource]} db]
+    (log/info (str "Closing connection to " (name storage-type)))
     (.close datasource)))

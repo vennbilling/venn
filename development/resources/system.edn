@@ -6,12 +6,18 @@
   :port 8080}
 
  :system/storage
- {:storage.type/postgresql {:database_name #profile {:development "venn_development"
+ {:storage.type/postgresql {:database-name #profile {:development "venn_development"
                                                      :test "venn_test"}
                             :host "0.0.0.0"
                             :port #profile {:development 5432
                                             :test 5433}
                             :user "venn"
-                            :password "password"}}}
+                            :password "password"
+                            :migrations {:directory "../../bases/server/src/com/vennbilling/server/migrations"
+                                         :managed-connection true}}
 
-u
+  :storage.type/sqlite {:database-name #profile {:development "data/venn_development.agent.db"
+                                                 :test ":memory:"}
+
+                        :migrations {:directory "../bases/agent/src/com/vennbilling/agent/migrations"
+                                     :managed-connection true}}}}

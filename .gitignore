@@ -14,3 +14,5 @@ pom.xml.asc
 log
 1
 projects/**/target
+
+data/*.db

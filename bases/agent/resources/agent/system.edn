@@ -7,14 +7,4 @@
   :port #profile {:development 8080
                   :prod #env VENN_AGENT_HTTP_PORT}}
 
- :system/storage
- {:storage.type/postgresql {:database_name #profile {:development "venn_agent_development"
-                                                     :prod #env VENN_AGENT_DB_NAME}
-                            :host #profile {:development "0.0.0.0"
-                                            :prod #env VENN_AGENT_DB_HOST}
-                            :port #profile {:development 5432
-                                            :prod #env VENN_AGENT_DB_PORT}
-                            :user #profile {:development "venn"
-                                            :prod #env VENN_AGENT_DB_USER}
-                            :password #profile {:development "password"
-                                                :prod #env VENN_AGENT_DB_PASSWORD}}}}
+ :system/storage {}}
