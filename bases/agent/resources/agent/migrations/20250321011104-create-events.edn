@@ -1,0 +1,4 @@
+{:ns com.vennbilling.agent.migrations.create-events
+ :up-fn migrate-up
+ :down-fn migrate-down
+ :transaction? true}

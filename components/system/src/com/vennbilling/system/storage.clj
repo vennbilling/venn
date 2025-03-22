@@ -3,7 +3,9 @@
             [malli.core :as m]
             [next.jdbc.connection :refer [jdbc-url]]
 
-            [com.vennbilling.logging.interface :as log])
+            [com.vennbilling.logging.interface :as log]
+            [com.vennbilling.database.interface]
+            [migratus.core :as migratus])
 
   (:import [com.zaxxer.hikari HikariDataSource]
            [java.sql Connection SQLException]
@@ -50,9 +52,18 @@
 (defn- build-migrations-config
   "Returns a map that represents a configuration used by migratus.core"
   [^HikariDataSource datasource {:keys [directory managed-connection]}]
-  {:migration-dir directory
+  {:store :database
+   :migration-dir directory
    :db {:datasource datasource
         :managed-connection? managed-connection}})
+
+(defn- bootstrap?
+  "Determines if migrations should automatically be run.
+
+  In SQLite, we limit one migration per table because of a lack of ALTER TABLE support.
+  Migrations should automatically be run to ensure the latest DB state is accurate."
+  [storage-type]
+  (= storage-type :storage.type/sqlite))
 
 (defmethod ig/init-key :db/connection
   [storage-type {:keys [migrations] :as db-config}]
@@ -69,12 +80,22 @@
           (.setJdbcUrl jdbc-url))
 
       ;; Test DB Connection
+      (log/info (str "Testing database connection to " dbtype "..."))
       (let [^Connection test-conn (.getConnection ds)]
         (log/info (str "Database connection to " dbtype " is healthy"))
         (.close test-conn)
 
         ;; Configure Migrations
         (let [migratus-config (build-migrations-config ds migrations)]
+
+          (if (and (bootstrap? storage-type) (seq (migratus/pending-list migratus-config)))
+            (do
+              (log/info "Bootstrapping database. Running all migrations...")
+              (migratus/migrate migratus-config)
+              (log/info "Bootstrapping complete."))
+            (log/info "Skipped bootstrapping database. Schema is up to date."))
+
+          (log/info (str "Database " dbtype " is ready to accept connections."))
           {:datasource ds :migrations-config migratus-config})))
     (catch ExceptionInfo e
       (log/exception e)

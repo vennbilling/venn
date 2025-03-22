@@ -19,5 +19,5 @@
   :storage.type/sqlite {:database-name #profile {:development "data/venn_development.agent.db"
                                                  :test ":memory:"}
 
-                        :migrations {:directory "../bases/agent/src/com/vennbilling/agent/migrations"
+                        :migrations {:directory "bases/agent/resources/agent/migrations"
                                      :managed-connection true}}}}
