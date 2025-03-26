@@ -1,16 +1,11 @@
 (ns com.vennbilling.system.storage
   (:require [integrant.core :as ig]
             [malli.core :as m]
-            [next.jdbc.connection :refer [jdbc-url]]
 
             [com.vennbilling.logging.interface :as log]
-            [com.vennbilling.database.interface]
-            [migratus.core :as migratus])
+            [com.vennbilling.database.interface :as database])
 
-  (:import [com.zaxxer.hikari HikariDataSource]
-           [java.sql Connection SQLException]
-
-           [clojure.lang ExceptionInfo]))
+  (:import  [clojure.lang ExceptionInfo]))
 
 ;; Supported Storage Engines
 (derive :storage.type/postgresql :db/connection)
@@ -42,16 +37,9 @@
    [:password {:optional true} :string]
    [:migrations DBMigrationsConfig]])
 
-(defn- build-jdbc-url
-  [dbtype config]
-  (let [{:keys [database-name]} config
-        conn (dissoc config :database-name)
-        db (assoc conn :dbname database-name :dbtype dbtype)]
-    (jdbc-url db)))
-
 (defn- build-migrations-config
   "Returns a map that represents a configuration used by migratus.core"
-  [^HikariDataSource datasource {:keys [directory managed-connection]}]
+  [datasource {:keys [directory managed-connection]}]
   {:store :database
    :migration-dir directory
    :db {:datasource datasource
@@ -71,38 +59,19 @@
   (try
     (let [valid-db-config (m/coerce DBConfig db-config)
           dbtype (name storage-type)
-          db (dissoc valid-db-config :migrations)
-          jdbc-url (build-jdbc-url dbtype db)
-          ^HikariDataSource ds (new HikariDataSource)]
+          db-connection-config (dissoc valid-db-config :migrations)
+          ds (database/establish-connection dbtype db-connection-config)
+          migratus-config (build-migrations-config ds migrations)]
 
-      ;; Configure the datastore
-      (-> ds
-          (.setJdbcUrl jdbc-url))
+      (when (bootstrap? storage-type)
+        (database/bootstrap migratus-config))
 
-      ;; Test DB Connection
-      (log/info (str "Testing database connection to " dbtype "..."))
-      (let [^Connection test-conn (.getConnection ds)]
-        (log/info (str "Database connection to " dbtype " is healthy"))
-        (.close test-conn)
+      (log/info (str "Database " dbtype " is configured and ready to accept connections."))
 
-        ;; Configure Migrations
-        (let [migratus-config (build-migrations-config ds migrations)]
-
-          (if (and (bootstrap? storage-type) (seq (migratus/pending-list migratus-config)))
-            (do
-              (log/info "Bootstrapping database. Running all migrations...")
-              (migratus/migrate migratus-config)
-              (log/info "Bootstrapping complete."))
-            (log/info "Skipped bootstrapping database. Schema is up to date."))
-
-          (log/info (str "Database " dbtype " is ready to accept connections."))
-          {:datasource ds :migrations-config migratus-config})))
+      {:datasource ds :migrations-config migratus-config})
     (catch ExceptionInfo e
       (log/exception e)
-      (throw (IllegalArgumentException. (ex-message e))))
-    (catch SQLException e
-      (log/exception (ex-info "Unable to connect to database" {:cause :sql-exception :exception e}))
-      (throw e))))
+      (throw (IllegalArgumentException. (ex-message e))))))
 
 (defmethod ig/halt-key! :db/connection
   [storage-type db]
