@@ -1,5 +1,3 @@
 {:system/env :unknown
 
- :system/server {}
-
- :system/storage {}}
+ :system/server {}}

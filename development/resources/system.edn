@@ -5,19 +5,24 @@
  {:host "0.0.0.0"
   :port 8080}
 
- :system/storage
- {:storage.type/postgresql {:database-name #profile {:development "venn_development"
-                                                     :test "venn_test"}
-                            :host "0.0.0.0"
-                            :port #profile {:development 5432
-                                            :test 5433}
-                            :user "venn"
-                            :password "password"
-                            :migrations {:directory "../../bases/server/src/com/vennbilling/server/migrations"
-                                         :managed-connection true}}
+ :system.storage/postgresql
+ {:database-name #profile {:development "venn_development"
+                           :test "venn_test"}
+  :host #profile {:development "0.0.0.0"
+                  :test "0.0.0.0"}
+  :port #profile {:development 5432
+                  :test 5433}
+  :user #profile {:development "venn"
+                  :test "venn"}
+  :password #profile {:development "password"
+                      :test "password"}
+  :migrations {:directory #profile {:development "../../bases/server/src/com/vennbilling/server/migrations"
+                                    :test "../../bases/server/src/com/vennbilling/server/migrations"}
+               :managed-connection true}}
 
-  :storage.type/sqlite {:database-name #profile {:development "data/venn_development.agent.db"
-                                                 :test ":memory:"}
-
-                        :migrations {:directory "bases/agent/resources/agent/migrations"
-                                     :managed-connection true}}}}
+ :system.storage/sqlite
+ {:database-name #profile {:development "data/venn_development.agent.db"
+                           :test ":memory:"}
+  :migrations {:directory #profile {:development "bases/agent/resources/agent/migrations"
+                                    :test "bases/agent/resources/agent/migrations"}
+               :managed-connection true}}}

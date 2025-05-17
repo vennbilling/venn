@@ -15,10 +15,10 @@
 (def ^:private VennSystem
   "A representation of what a system in Venn should look like"
   [:map
-   {:closed true}
    [:system/env :keyword]
    [:system/server :map]
-   [:system/storage :map]])
+
+   [:system.storage/* {:optional true} :map]])
 
 (def ^:private default-config (io/resource "system/default.edn"))
 (def ^:private defaults (m/coerce VennSystem (aero/read-config default-config {:profile :unknown})))
@@ -27,7 +27,7 @@
   "
   Reads an aero config and returns config that is unversal to all bases.
 
-  A map with the follow shape will always be returned with values overrided by
+  A map with the following keys will always be returned with values overrided by
   the aero config.
 
   ```clojure
@@ -43,7 +43,7 @@
 
   - `:system/env` - the current environment for the system
   - `:system/server` - the backing web server, if applicable
-  - `:system/storage` - any storage mechanisms for this server such as DB or filesystem
+  - `:system/storage` - configurations for storage used by this systesm such as DB or filesystem
   "
   [config profile]
   (try
@@ -69,7 +69,7 @@
   ;; TODO we should conditionally call these "with-" functions based on the presence of
   ;; a system key. Right now, we assume every system wants an http server, database, etc
   (let [base (read-aero-config config-file profile)
+        storage-config (storage/with-storage base)
         server-config (server/with-http-server routes)
-        storage-config (storage/with-storage (base :system/storage))
-        system (merge-with into base server-config storage-config)]
+        system (merge-with into server-config storage-config)]
     system))

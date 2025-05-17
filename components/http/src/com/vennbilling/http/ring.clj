@@ -7,7 +7,9 @@
             [reitit.ring.middleware.exception :as exception]
             [reitit.ring.middleware.muuntaja :as muuntaja]
             [reitit.ring.middleware.parameters :as parameters]
-            [ring.logger :as logger]))
+            [ring.logger :as logger]
+
+            [com.vennbilling.http.middleware :as middleware]))
 
 (def ^:private default-middleware [;; query-params & form-params
                                    parameters/parameters-middleware
@@ -29,11 +31,23 @@
    :muuntaja m/instance})
 
 (defn new-handler
-  [router]
-  (logger/wrap-with-logger
-   (ring/ring-handler
-    router
-    (ring/create-default-handler))))
+  "Creates a new Ring handler with the given router and optional storage configuration.
+   If a storage configuration is provided, adds middleware to inject connections to the storage
+   into each request.
+
+  TODO These middlewares should be injected via reitit with :middleware not by wrapping a ring handler"
+  ([router]
+   (-> (ring/ring-handler
+        router
+        (ring/create-default-handler))
+       (logger/wrap-with-logger)))
+
+  ([router storage]
+   (-> (ring/ring-handler
+        router
+        (ring/create-default-handler))
+       (middleware/wrap-storage storage)
+       (logger/wrap-with-logger))))
 
 (defn new-router
   [base-path routes & middleware]

@@ -7,21 +7,6 @@
 
   (:import  [clojure.lang ExceptionInfo]))
 
-;; Supported Storage Engines
-(derive :storage.type/postgresql :db/connection)
-(derive :storage.type/sqlite :db/connection)
-
-(def ^:private storage-config
-  {:system/storage (ig/refset :storage/type)})
-
-(defn with-storage
-  [storage]
-  (merge-with into storage-config storage))
-
-(defmethod ig/init-key :system/storage
-  [_ stores]
-  stores)
-
 (def ^:private DBMigrationsConfig
   [:map
    [:directory :string]
@@ -36,6 +21,26 @@
    [:user {:optional true} :string]
    [:password {:optional true} :string]
    [:migrations DBMigrationsConfig]])
+
+(derive :system.storage/postgresql :db/connection)
+(derive :system.storage/sqlite :db/connection)
+
+(defn- get-ig-ref-for-storage
+  "Returns the ig/ref for the storage type"
+  [storage]
+  (ig/ref storage))
+
+(defn with-storage
+  [config]
+  (let [storage-configs
+        (filter (fn [[k _]] (= "system.storage" (namespace k)))
+                config)]
+    (if (seq storage-configs)
+      (do
+        (log/info (str "System will be initialized with storage types: " (keys storage-configs)))
+        (let [refs (into {} (map (fn [[k _]] [k (get-ig-ref-for-storage k)])) storage-configs)]
+          (assoc-in config [:system/storage :databases] refs)))
+      (merge config {:system/storage {}}))))
 
 (defn- build-migrations-config
   "Returns a map that represents a configuration used by migratus.core"
@@ -52,6 +57,17 @@
   Migrations should automatically be run to ensure the latest DB state is accurate."
   [storage-type]
   (= storage-type :storage.type/sqlite))
+
+(defmethod ig/init-key :system/storage
+  [_ {:keys [databases]}]
+
+  ;; Database connections
+  (let [db-connections (into {}
+                             (filter (fn [[_ v]] (contains? v :datasource))
+                                     databases))]
+
+;; Return the registry with database connections
+    {:db-connections db-connections}))
 
 (defmethod ig/init-key :db/connection
   [storage-type {:keys [migrations] :as db-config}]

@@ -5,6 +5,4 @@
  {:host #profile {:development "0.0.0.0"
                   :prod #env VENN_AGENT_HTTP_HOST}
   :port #profile {:development 8080
-                  :prod #env VENN_AGENT_HTTP_PORT}}
-
- :system/storage {}}
+                  :prod #env VENN_AGENT_HTTP_PORT}}}

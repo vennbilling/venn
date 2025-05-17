@@ -14,11 +14,11 @@
 
 (defn with-http-server
   [routes]
-  {:system/server {:handler (ig/ref :http/handler)
-                   :storage (ig/ref :system/storage)}
+  {:system/server {:handler (ig/ref :http/handler)}
 
    :http/handler
-   {:router (ig/ref :http/router)}
+   {:router (ig/ref :http/router)
+    :storage (ig/ref :system/storage)}
 
    :http/router
    {:routes routes}})
@@ -42,8 +42,10 @@
   (.stop undertow))
 
 (defmethod ig/init-key :http/handler
-  [_ {:keys [router]}]
-  (http/new-ring-handler router))
+  [_ {:keys [router storage]}]
+  (if storage
+    (http/new-ring-handler router storage)
+    (http/new-ring-handler router)))
 
 (defmethod ig/init-key :http/router
   [_ {:keys [routes]}]
