@@ -1,13 +1,11 @@
 (ns com.vennbilling.healthcheck.core
   (:require
-    [ring.util.http-response :as http]
-    [ring.util.http-status :as http-status]))
-
+   [ring.util.http-response :as http]
+   [ring.util.http-status :as http-status]))
 
 (defn- healthcheck-handler
-  [_]
+  [opts]
   (http/ok {}))
-
 
 (def simple-route
   ["/health"

@@ -1,7 +1,7 @@
 {:system/env #profile {:dev :dev
                        :prod :prod}
 
- :http/server
+ :system/server
  {:host #profile {:dev "0.0.0.0"
                   :prod #env VENN_SERVER_HTTP_HOST}
   :port #profile {:dev 8080
