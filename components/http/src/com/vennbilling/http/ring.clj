@@ -51,6 +51,6 @@
 
 (defn new-router
   [base-path routes & middleware]
-  (let [middlewares (vec (set (into default-middleware middleware)))
+  (let [middlewares (into default-middleware middleware)
         config (assoc ring-router-config :middleware middlewares)]
     (ring/router [base-path config routes])))

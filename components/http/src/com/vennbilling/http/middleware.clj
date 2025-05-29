@@ -7,7 +7,6 @@
    that adds the database connections to each request.
 
    The connections will be available in the request under:
-   - :storage-registry - The complete storage registry
    - :db-connections - Map of all database connections
   "
   [handler {:keys [db-connections]}]
