@@ -30,3 +30,18 @@
    {:post {:parameters {:body identify-request-schema}
            :responses {http-status/created {:body identify-response-schema}}
            :handler identify-handler}}])
+
+(def ^:private charge-request-schema
+  [:map
+   [:customer_id string?]
+   [:event string?]
+   [:properties {:otional true} map?]])
+
+(defn- charge-handler
+  [_]
+  (http/created "" {}))
+
+(def charge-route
+  ["/charge"
+   {:post {:parameters {:body charge-request-schema}
+           :handler charge-handler}}])

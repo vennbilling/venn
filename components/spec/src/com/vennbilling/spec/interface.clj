@@ -6,7 +6,7 @@
 (def identify-route core/identify-route)
 
 ;; CHARGE
-(def charge-route [])
+(def charge-route core/charge-route)
 
 ;; USAGE
 (def usage-route [])

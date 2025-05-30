@@ -10,6 +10,7 @@
 (def api-routes
   ["/v1"
    [venn-spec/identify-route
+    venn-spec/charge-route
     healthcheck/simple-route]])
 
 (def ^:const banner (slurp (io/resource "agent/banner.txt")))

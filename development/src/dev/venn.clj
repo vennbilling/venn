@@ -18,6 +18,7 @@
 (def routes
   [base-path
    [venn-spec/identify-route
+    venn-spec/charge-route
     customer/list-route
     customer/show-route
     healthcheck/simple-route]])
