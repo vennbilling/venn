@@ -1,14 +1,14 @@
-(ns com.vennbilling.customer.core)
+(ns com.vennbilling.customer.model)
 
-(def ^:private billing-providers ["undefined" "stripe" "third-party"])
+(def billing-providers ["undefined" "stripe" "third-party"])
 
 (def Schema
   [:map
    [:identifier :string]
-   [:traits :map]
+   [:traits {:optional true} :map]
    [:billing_provider {:optional true} [:map
                                         [:type [:enum billing-providers]]
-                                        [:identifier [:or :integer :string]]]]])
+                                        [:identifier [:or :int :string]]]]])
 
 (defn make-customer
   [identifier traits billing-provider]

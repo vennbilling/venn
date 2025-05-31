@@ -9,8 +9,8 @@
 
 (def api-routes
   ["/v1"
-   [customer/list-route
-    customer/show-route
+   [customer/list-handler
+    customer/show-handler
 
     healthcheck/simple-route]])
 

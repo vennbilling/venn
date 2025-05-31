@@ -1,27 +1,19 @@
 (ns com.vennbilling.customer.interface
   (:require
-   [com.vennbilling.customer.core :as core]
-   [com.vennbilling.customer.routes :as routes]))
+   [com.vennbilling.customer.model :as model]
+   [com.vennbilling.customer.handlers :as handlers]))
 
 (def Schema
-  core/Schema)
+  model/Schema)
 
-(defn make-customer
-  "Creates a customer record with the given identifier. Can pass in an optional set of traits and a billing provider"
+(def list-handler handlers/list)
+(def show-handler handlers/show)
+
+(defn new
+  "Creates a customer map with the given identifier. Can pass in an optional set of traits and a billing provider"
   ([identifier]
-   (core/make-customer identifier {} {}))
+   (model/make-customer identifier {} {}))
   ([identifier traits]
-   (core/make-customer identifier traits {}))
+   (model/make-customer identifier traits {}))
   ([identifier traits billing-provider]
-   (core/make-customer identifier traits billing-provider)))
-
-(defn find-by-id
-  [id]
-  (core/find-by-id id))
-
-(defn all
-  []
-  [(core/find-by-id "1")])
-
-(def list-route routes/list-route)
-(def show-route routes/show-route)
+   (model/make-customer identifier traits billing-provider)))

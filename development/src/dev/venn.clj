@@ -21,8 +21,8 @@
     venn-spec/charge-route
     venn-spec/usage-route
     venn-spec/reverse-route
-    customer/list-route
-    customer/show-route
+    customer/list-handler
+    customer/show-handler
     healthcheck/simple-route]])
 
 ;; Configure Integrant REPL

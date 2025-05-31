@@ -8,7 +8,7 @@
   [{{:keys [identifier traits]
      billing-provider :billing_provider
      :or {traits {} billing-provider {}}} :body-params}]
-  (http/created "" (customer/make-customer identifier traits billing-provider)))
+  (http/created "" (customer/new identifier traits billing-provider)))
 
 (def identify-route
   ["/identify"
