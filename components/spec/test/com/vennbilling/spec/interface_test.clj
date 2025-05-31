@@ -18,29 +18,32 @@
                 (let [request {:body-params {:identifier "a" :traits {} :billing_provider {}}}
                       resp (handler request)
                       {:keys [status body]} resp
-                      {:keys [identifier traits billing-provider]} body]
+                      {:keys [identifier traits billing_provider]} body
+                      billing-provider billing_provider]
                   (is (= http-status/created status))
                   (is (= "a" identifier))
                   (is (= {} traits))
-                  (is (nil? billing-provider))))
+                  (is (= {} billing-provider))))
               (testing "with traits but no billing provider"
                 (let [request {:body-params {:identifier "a" :traits {:customer true} :billing_provider {}}}
                       resp (handler request)
                       {:keys [status body]} resp
-                      {:keys [identifier traits billing-provider]} body]
+                      {:keys [identifier traits billing_provider]} body
+                      billing-provider billing_provider]
                   (is (= http-status/created status))
                   (is (= "a" identifier))
                   (is (= {:customer true} traits))
-                  (is (nil? billing-provider))))
+                  (is (= {} billing-provider))))
               (testing "with all attributes"
                 (let [request {:body-params {:identifier "a" :traits {:customer true} :billing_provider {:name "stripe"}}}
                       resp (handler request)
                       {:keys [status body]} resp
-                      {:keys [identifier traits billing_provider]} body]
+                      {:keys [identifier traits billing_provider]} body
+                      billing-provider billing_provider]
                   (is (= http-status/created status))
                   (is (= "a" identifier))
                   (is (= {:customer true} traits))
-                  (is (= {:name "stripe"} billing_provider))))))))))
+                  (is (= {:name "stripe"} billing-provider))))))))))
 
   (testing "CHARGE"
     (let [[path route] spec/charge-route]

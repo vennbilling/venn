@@ -1,62 +1,21 @@
-(ns com.vennbilling.customer.core
-  (:require
-    [malli.core :as m]
-    [malli.error :as me]))
+(ns com.vennbilling.customer.core)
 
-
-(defprotocol Serialization
-
-  (serialize [record]))
-
-
-(defprotocol Validation
-
-  (validate [record])
-
-  (errors [record]))
-
+(def ^:private billing-providers ["undefined" "stripe" "third-party"])
 
 (def Schema
   [:map
-   [:xt/id :uuid]
    [:identifier :string]
    [:traits :map]
-   [:billing-provider :map]])
-
-
-(defrecord Customer
-  [identifier traits billing-provider]
-
-  Validation
-
-  (validate
-    [this]
-    (-> Schema
-        (m/schema)
-        (m/validate this)))
-
-
-  (errors
-    [this]
-    (-> Schema
-        (m/explain this)
-        (me/humanize)))
-
-
-  Serialization
-
-  (serialize
-    [this]
-    (-> this
-        (dissoc :billing-provider)
-        (assoc :billing_provider (:billing-provider this)))))
-
+   [:billing_provider {:optional true} [:map
+                                        [:type [:enum billing-providers]]
+                                        [:identifier [:or :integer :string]]]]])
 
 (defn make-customer
   [identifier traits billing-provider]
-  (assoc (->Customer identifier traits billing-provider) :xt/id (java.util.UUID/randomUUID)))
-
+  {:identifier identifier
+   :traits traits
+   :billing_provider billing-provider})
 
 (defn find-by-id
   [id]
-  (assoc (make-customer id {} {}) :xt/id (java.util.UUID/randomUUID)))
+  (make-customer id {} {}))
