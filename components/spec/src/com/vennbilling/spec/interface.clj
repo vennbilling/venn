@@ -1,19 +1,15 @@
 (ns com.vennbilling.spec.interface
   (:require
-    [com.vennbilling.spec.identify :as identify]))
-
+   [com.vennbilling.spec.core :as core]))
 
 ;; IDENTIFY
-(def identify-route identify/route)
-
+(def identify-route core/identify-route)
 
 ;; CHARGE
-(def charge-route [])
-
+(def charge-route core/charge-route)
 
 ;; USAGE
-(def usage-route [])
-
+(def usage-route core/usage-route)
 
 ;; REVERSE
-(def reverse-route [])
+(def reverse-route core/reverse-route)
