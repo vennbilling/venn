@@ -65,4 +65,54 @@
                 (let [request {:body-params {:customer_id "a" :event "Test Ran" :properties {:quantity 1}}}
                       resp (handler request)
                       {:keys [status]} resp]
+                  (is (= http-status/created status))))))))))
+
+  (testing "USAGE"
+    (let [[path route] spec/usage-route]
+      (testing "path"
+        (is (= "/usage" path)))
+
+      (testing "http"
+        (testing "POST request"
+          (testing "handler function"
+            (let [{{:keys [handler]} :post} route]
+              (testing "with no properties"
+                (let [request {:body-params {:customer_id "a" :event "Test Ran" :properties {}}}
+                      resp (handler request)
+                      {:keys [status]} resp]
+                  (is (= http-status/created status))))
+              (testing "with missing properties"
+                (let [request {:body-params {:customer_id "a" :event "Test Ran"}}
+                      resp (handler request)
+                      {:keys [status]} resp]
+                  (is (= http-status/created status))))
+              (testing "with properties"
+                (let [request {:body-params {:customer_id "a" :event "Test Ran" :properties {:quantity 1}}}
+                      resp (handler request)
+                      {:keys [status]} resp]
+                  (is (= http-status/created status))))))))))
+
+  (testing "REVERSE"
+    (let [[path route] spec/reverse-route]
+      (testing "path"
+        (is (= "/reverse" path)))
+
+      (testing "http"
+        (testing "POST request"
+          (testing "handler function"
+            (let [{{:keys [handler]} :post} route]
+              (testing "with no properties"
+                (let [request {:body-params {:customer_id "a" :event "Test Ran" :properties {}}}
+                      resp (handler request)
+                      {:keys [status]} resp]
+                  (is (= http-status/created status))))
+              (testing "with missing properties"
+                (let [request {:body-params {:customer_id "a" :event "Test Ran"}}
+                      resp (handler request)
+                      {:keys [status]} resp]
+                  (is (= http-status/created status))))
+              (testing "with properties"
+                (let [request {:body-params {:customer_id "a" :event "Test Ran" :properties {:quantity 1}}}
+                      resp (handler request)
+                      {:keys [status]} resp]
                   (is (= http-status/created status)))))))))))

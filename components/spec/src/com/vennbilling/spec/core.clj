@@ -31,7 +31,7 @@
            :responses {http-status/created {:body identify-response-schema}}
            :handler identify-handler}}])
 
-(def ^:private charge-request-schema
+(def ^:private spec-request-schema
   [:map
    [:customer_id string?]
    [:event string?]
@@ -43,5 +43,23 @@
 
 (def charge-route
   ["/charge"
-   {:post {:parameters {:body charge-request-schema}
+   {:post {:parameters {:body spec-request-schema}
            :handler charge-handler}}])
+
+(defn- usage-handler
+  [_]
+  (http/created "" {}))
+
+(def usage-route
+  ["/usage"
+   {:post {:parameters {:body spec-request-schema}
+           :handler usage-handler}}])
+
+(defn- reverse-handler
+  [_]
+  (http/created "" {}))
+
+(def reverse-route
+  ["/reverse"
+   {:post {:parameters {:body spec-request-schema}
+           :handler reverse-handler}}])

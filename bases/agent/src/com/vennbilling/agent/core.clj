@@ -11,6 +11,8 @@
   ["/v1"
    [venn-spec/identify-route
     venn-spec/charge-route
+    venn-spec/usage-route
+    venn-spec/reverse-route
     healthcheck/simple-route]])
 
 (def ^:const banner (slurp (io/resource "agent/banner.txt")))

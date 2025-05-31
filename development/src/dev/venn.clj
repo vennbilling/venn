@@ -19,6 +19,8 @@
   [base-path
    [venn-spec/identify-route
     venn-spec/charge-route
+    venn-spec/usage-route
+    venn-spec/reverse-route
     customer/list-route
     customer/show-route
     healthcheck/simple-route]])

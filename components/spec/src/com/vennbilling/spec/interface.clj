@@ -9,7 +9,7 @@
 (def charge-route core/charge-route)
 
 ;; USAGE
-(def usage-route [])
+(def usage-route core/usage-route)
 
 ;; REVERSE
-(def reverse-route [])
+(def reverse-route core/reverse-route)
