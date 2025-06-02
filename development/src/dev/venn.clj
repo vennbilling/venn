@@ -2,9 +2,7 @@
   (:require
    [clojure.java.io :as io]
    [clojure.tools.namespace.repl :as repl]
-   [com.vennbilling.customer.interface :as customer]
-   [com.vennbilling.healthcheck.interface :as healthcheck]
-   [com.vennbilling.spec.interface :as venn-spec]
+   [com.vennbilling.http.interface :as http]
    [com.vennbilling.system.interface :as system]
    [integrant.core :as ig]
    [integrant.repl :refer [prep go halt reset init]]
@@ -17,13 +15,9 @@
 (def base-path "/v1")
 (def routes
   [base-path
-   [venn-spec/identify-route
-    venn-spec/charge-route
-    venn-spec/usage-route
-    venn-spec/reverse-route
-    customer/list-handler
-    customer/show-handler
-    healthcheck/simple-route]])
+   [http/agent-routes
+    http/server-routes
+    http/healthcheck-routes]])
 
 ;; Configure Integrant REPL
 (integrant.repl/set-prep! #(-> mono-config

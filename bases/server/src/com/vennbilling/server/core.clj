@@ -2,17 +2,14 @@
   (:gen-class)
   (:require
    [clojure.java.io :as io]
-   [com.vennbilling.customer.interface :as customer]
-   [com.vennbilling.healthcheck.interface :as healthcheck]
+   [com.vennbilling.http.interface :as http]
    [com.vennbilling.logging.interface :as log]
    [com.vennbilling.system.interface :as system]))
 
 (def api-routes
   ["/v1"
-   [customer/list-handler
-    customer/show-handler
-
-    healthcheck/simple-route]])
+   [http/server-routes
+    http/healthcheck-routes]])
 
 (def ^:const banner (slurp (io/resource "server/banner.txt")))
 (def config-file (io/resource "server/system.edn"))

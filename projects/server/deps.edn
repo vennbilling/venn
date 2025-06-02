@@ -2,6 +2,7 @@
         poly/database {:local/root "../../components/database"}
         poly/healthcheck {:local/root "../../components/healthcheck"}
         poly/http {:local/root "../../components/http"}
+        poly/spec {:local/root "../../components/spec"}
         poly/system {:local/root "../../components/system"}
         poly/logging {:local/root "../../components/logging"}
 

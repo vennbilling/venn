@@ -1,6 +1,14 @@
 (ns com.vennbilling.http.interface
   (:require [com.vennbilling.http.ring :as ring]
+            [com.vennbilling.http.routes :as routes]
             [com.vennbilling.http.undertow :as undertow]))
+
+(def healthcheck-routes [routes/healthchecks])
+
+(def agent-routes [routes/spec])
+
+(def server-routes
+  [routes/customers])
 
 (defn serve
   "Starts up an HTTP server with a io.undertow config and ring handler. Returns an undertow server"
