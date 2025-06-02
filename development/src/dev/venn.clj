@@ -1,74 +1,62 @@
 (ns dev.venn
   (:require
-   [aero.core :as aero]
    [clojure.java.io :as io]
    [clojure.tools.namespace.repl :as repl]
-   [clojure.pprint :refer [pprint]]
-   [com.vennbilling.customer.interface :as customer]
-   [com.vennbilling.healthcheck.interface :as healthcheck]
-   [com.vennbilling.spec.interface :as venn-spec]
+   [com.vennbilling.http.interface :as http]
    [com.vennbilling.system.interface :as system]
    [integrant.core :as ig]
    [integrant.repl :refer [prep go halt reset init]]
    [integrant.repl.state :as s]
    [migratus.core :as migratus]))
 
-(def profile :dev)
-
-;; In development, Venn is a single monolith service with all the routes
-;; We also generate the system.edn on the by merging all the bases' configs
-(def agent-config-file (io/resource "../../../bases/agent/resources/agent/system.edn"))
-(def server-config-file (io/resource "../../../bases/server/resources/server/system.edn"))
-
-(defn gen-service-config-file
-  "Generate a config for the venn monolith and write it to system.edn"
-  []
-  (let [agent-config (aero/read-config agent-config-file {:profile profile})
-        server-config (aero/read-config server-config-file {:profile profile})
-        mono-config (merge server-config agent-config)]
-    ;; This file is in .gitignore
-    (pprint mono-config (io/writer "development/resources/system.edn"))
-    (io/resource "system.edn")))
-
+;; In development, Venn is a single monolith service with all the routes across all services joined togehter
+(def profile :development)
+(def mono-config (io/resource "system.edn"))
 (def base-path "/v1")
-(def agent-routes
-  [venn-spec/identify-route])
-(def server-routes
-  [customer/list-route
-   customer/show-route])
-(def internal-routes
-  [healthcheck/simple-route])
-(def routes (conj [base-path] (apply conj agent-routes server-routes internal-routes)))
+(def routes
+  [base-path
+   [http/agent-routes
+    http/server-routes
+    http/healthcheck-routes]])
 
-(integrant.repl/set-prep! #(-> (gen-service-config-file)
+;; Configure Integrant REPL
+(integrant.repl/set-prep! #(-> mono-config
                                (system/init profile routes)
                                (ig/prep)))
 
 (repl/set-refresh-dirs "../../../components")
-
-(def migratus-cfg (if-let [db (-> s/system
-                                  (:db/server))]
-                    db
-                    {}))
-
-;; Config states.
-(comment
-  s/system
-  migratus-cfg)
 
 ;; Helpers to start and stop the monolith
 (comment
   (prep)
   (init)
   (go)
+  s/system
   (halt)
   (reset))
 
-;; DB-related operations
-(comment
-  (migratus/init migratus-cfg)
-  ;;(migratus/create migratus-cfg "migration_name")
-  (migratus/pending-list migratus-cfg)
-  (migratus/migrate migratus-cfg)
-  (migratus/rollback migratus-cfg))
+;; Helpers for DB-related operations
+(defn migratus-config
+  [storage]
+  (if (seq s/system)
+    (let [k (keyword (str "storage.type/" storage))]
+      (get-in s/system [k :migrations-config]))
+    {}))
 
+(def agent-db 'sqlite)
+(def server-db 'postgresql)
+
+(comment
+  ;; venn agent
+  (migratus/init (migratus-config agent-db))
+  (migratus/create (migratus-config agent-db) "create-events" :edn)
+  (migratus/pending-list (migratus-config agent-db))
+  (migratus/migrate (migratus-config agent-db))
+  (migratus/rollback (migratus-config agent-db))
+
+  ;; venn server
+  (migratus/init (migratus-config server-db))
+  (migratus/create (migratus-config server-db) "migration_name" :edn)
+  (migratus/pending-list (migratus-config server-db))
+  (migratus/migrate (migratus-config server-db))
+  (migratus/rollback (migratus-config server-db)))

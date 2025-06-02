@@ -1,44 +1,61 @@
 (ns com.vennbilling.spec.interface-test
   (:require
-    [clojure.test :as test :refer [deftest testing is]]
-    [com.vennbilling.spec.interface :as spec]
-    [ring.util.http-status :as http-status]))
+   [clojure.test :as test :refer [deftest testing is]]
+   [com.vennbilling.spec.interface :as spec]))
 
-
-(deftest testing-routes []
+(deftest testing-handlers []
   (testing "IDENTIFY"
-    (let [[path route] spec/identify-route]
-      (testing "path"
-        (is (= "/identify" path)))
+    (testing "with no traits or billing provider"
+      (let [[status body] (spec/identify-handler {:body-params {:identifier "a"}})
+            {:keys [identifier traits billing_provider]} body
+            billing-provider billing_provider]
+        (is (= :created status))
+        (is (= "a" identifier))
+        (is (= {} traits))
+        (is (= {} billing-provider))))
+    (testing "with traits but no billing provider"
+      (let [[status body] (spec/identify-handler {:body-params {:identifier "a" :traits {:testing true}}})
+            {:keys [identifier traits billing_provider]} body
+            billing-provider billing_provider]
+        (is (= :created status))
+        (is (= "a" identifier))
+        (is (= {:testing true} traits))
+        (is (= {} billing-provider))))
+    (testing "with all attributes"
+      (let [[status body] (spec/identify-handler {:body-params {:identifier "a" :traits {:testing true} :billing_provider {:type "stripe", :identifier "b"}}})
+            {:keys [identifier traits billing_provider]} body
+            billing-provider billing_provider]
+        (is (= :created status))
+        (is (= "a" identifier))
+        (is (= {:testing true} traits))
+        (is (= {:type "stripe" :identifier "b"} billing-provider)))))
 
-      (testing "http"
-        (testing "POST request"
-          (testing "handler function"
-            (let [{{:keys [handler]} :post} route]
-              (testing "with no traits or billing providider"
-                (let [request {:body-params {:identifier "a" :traits {} :billing_provider {}}}
-                      resp (handler request)
-                      {:keys [status body]} resp
-                      {:keys [identifier traits billing-provider]} body]
-                  (is (= http-status/created status))
-                  (is (= "a" identifier))
-                  (is (= {} traits))
-                  (is (nil? billing-provider))))
-              (testing "with traits but no billing provider"
-                (let [request {:body-params {:identifier "a" :traits {:customer true} :billing_provider {}}}
-                      resp (handler request)
-                      {:keys [status body]} resp
-                      {:keys [identifier traits billing-provider]} body]
-                  (is (= http-status/created status))
-                  (is (= "a" identifier))
-                  (is (= {:customer true} traits))
-                  (is (nil? billing-provider))))
-              (testing "with all attributes"
-                (let [request {:body-params {:identifier "a" :traits {:customer true} :billing_provider {:name "stripe"}}}
-                      resp (handler request)
-                      {:keys [status body]} resp
-                      {:keys [identifier traits billing_provider]} body]
-                  (is (= http-status/created status))
-                  (is (= "a" identifier))
-                  (is (= {:customer true} traits))
-                  (is (= {:name "stripe"} billing_provider)))))))))))
+  (testing "CHARGE"
+    (testing "with no properties"
+      (let [[status body] (spec/charge-handler {:body-params {:customer_id "a" :event "Test Ran"}})]
+        (is (= :created status))
+        (is (= {} body))))
+    (testing "with properties"
+      (let [[status body] (spec/charge-handler {:body-params {:customer_id "a" :event "Test Ran" :properties {:quantity 1}}})]
+        (is (= :created status))
+        (is (= {} body)))))
+
+  (testing "USAGE"
+    (testing "with no properties"
+      (let [[status body] (spec/usage-handler {:body-params {:customer_id "a" :event "Test Ran"}})]
+        (is (= :created status))
+        (is (= {} body))))
+    (testing "with properties"
+      (let [[status body] (spec/usage-handler {:body-params {:customer_id "a" :event "Test Ran" :properties {:quantity 1}}})]
+        (is (= :created status))
+        (is (= {} body)))))
+
+  (testing "REVERSE"
+    (testing "with no properties"
+      (let [[status body] (spec/reverse-handler {:body-params {:customer_id "a" :event "Test Ran"}})]
+        (is (= :created status))
+        (is (= {} body))))
+    (testing "with properties"
+      (let [[status body] (spec/reverse-handler {:body-params {:customer_id "a" :event "Test Ran" :properties {:quantity 1}}})]
+        (is (= :created status))
+        (is (= {} body))))))

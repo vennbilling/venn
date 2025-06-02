@@ -2,15 +2,14 @@
   (:gen-class)
   (:require
    [clojure.java.io :as io]
-   [com.vennbilling.healthcheck.interface :as healthcheck]
+   [com.vennbilling.http.interface :as http]
    [com.vennbilling.logging.interface :as log]
-   [com.vennbilling.spec.interface :as venn-spec]
    [com.vennbilling.system.interface :as system]))
 
 (def api-routes
   ["/v1"
-   [venn-spec/identify-route
-    healthcheck/simple-route]])
+   http/agent-routes
+   http/healthcheck-routes])
 
 (def ^:const banner (slurp (io/resource "agent/banner.txt")))
 (def config-file (io/resource "agent/system.edn"))
