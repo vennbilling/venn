@@ -45,7 +45,6 @@ bb psql-test  # Connect to test PostgreSQL database
 **REPL Development:**
 ```bash
 clj -M:dev:repl    # Development REPL
-clj -M:test:repl   # Test REPL
 ```
 
 **Build Commands:**
@@ -56,8 +55,18 @@ clj -T:build uberjar :project agent     # Build agent uberjar
 
 **Testing:**
 ```bash
-# Test runner is configured in tests.edn using Kaocha
-clj -M:poly test
+clj -M:poly test       # Run tests for all projects
+```
+
+**Polylith Commands:**
+```bash
+clj -M:poly info       # Show workspace info and project structure
+clj -M:poly deps       # Show dependencies between components
+clj -M:poly check      # Check for circular dependencies and issues
+clj -M:poly diff       # Show what has changed since last tag
+clj -M:poly create component name:my-component    # Create new component
+clj -M:poly create base name:my-base              # Create new base
+clj -M:poly create project name:my-project        # Create new project
 ```
 
 ## Development Workflow
