@@ -1,4 +1,4 @@
-name: "poly/test"
+name: "poly"
 
 on:
   pull_request:
