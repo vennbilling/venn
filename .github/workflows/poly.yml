@@ -1,4 +1,4 @@
-name: "test"
+name: "poly"
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ on:
       - "**.xml"
 
 jobs:
-  poly:
+  test:
     strategy:
       matrix:
         version: ["java-8", "java-11", "java-17", "java-21"]
