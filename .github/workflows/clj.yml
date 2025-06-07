@@ -117,3 +117,17 @@ jobs:
       - name: Run Tests
         run: |
           clojure -M:poly test project:${{ matrix.project }}
+
+  clj-kondo:
+    needs: uberjar
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+      - name: clj-kondo
+        uses: nnichols/clojure-lint-action@v2
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
