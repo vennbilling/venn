@@ -11,6 +11,7 @@ jobs:
     strategy:
       matrix:
         version: ["java-11", "java-17", "java-21"]
+        project: ["agent", "server"]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -23,6 +24,9 @@ jobs:
 
       - name: Set Java Version
         run: echo "VENN_JAVA_VERSION=$(echo ${{ matrix.version}} | cut -d'-' -f2)" >> $GITHUB_ENV
+      
+      - name: Set Project
+        run: echo "VENN_PROJECT=$(echo ${{ matrix.project}} | cut -d'-' -f2)" >> $GITHUB_ENV
 
       - name: Prepare java
         uses: actions/setup-java@v3
@@ -42,8 +46,8 @@ jobs:
             ~/.m2/repository
             ~/.gitlibs
             ~/.deps.clj
-          key: cljdeps-poly-test-${{ hashFiles('deps.edn', 'bb.edn') }}
-          restore-keys: cljdeps-poly-test-
+          key: cljdeps-build-uberjar-${{ matrix.project }}-${{ matrix.version }}-${{ hashFiles('deps.edn', 'bb.edn') }}
+          restore-keys: cljdeps-build-uberjar-${{ matrix.project }}-${{ matrix.version }}-
 
       - name: Install babashka
         uses: turtlequeue/setup-babashka@v1.5.2
@@ -52,4 +56,4 @@ jobs:
 
       - name: Run Tests
         run: |
-          clojure -M:poly test
+          clojure -M:poly test project:${{ matrix.project }}
