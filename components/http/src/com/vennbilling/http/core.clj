@@ -13,7 +13,7 @@
       :not-found (http/not-found body)
       (http/bad-request body))))
 
-(defmacro defhandler
+(defn defhandler
   "Defines a handler function that automatically applies respond-with to the result.
    
    Usage:
