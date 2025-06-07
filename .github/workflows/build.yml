@@ -54,7 +54,7 @@ jobs:
             ~/.m2/repository
             ~/.gitlibs
             ~/.deps.clj
-          key: cljdeps-build-uberjar-${{ matrix.project }}-${{ matrix.version }}-{{ hashFiles('deps.edn', 'bb.edn') }}
+          key: cljdeps-build-uberjar-${{ matrix.project }}-${{ matrix.version }}-${{ hashFiles('deps.edn', 'bb.edn') }}
           restore-keys: cljdeps-build-uberjar-${{ matrix.project }}-${{ matrix.version }}-
 
       - name: Install babashka
