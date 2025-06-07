@@ -54,8 +54,8 @@ jobs:
             ~/.m2/repository
             ~/.gitlibs
             ~/.deps.clj
-          key: cljdeps-poly-test-${{ hashFiles('deps.edn', 'bb.edn') }}
-          restore-keys: cljdeps-poly-test-
+          key: cljdeps-build-uberjar-${{ hashFiles('deps.edn', 'bb.edn') }}
+          restore-keys: cljdeps-build-uberjar-
 
       - name: Install babashka
         uses: turtlequeue/setup-babashka@v1.5.2
