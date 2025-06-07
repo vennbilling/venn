@@ -3,6 +3,14 @@ name: "clj"
 on:
   pull_request:
     branches: [main]
+    paths:
+      - "**.clj"
+      - "**.edn"
+      - "**.xml"
+      - "**/deps.edn"
+      - "build.clj"
+      - "workspace.edn"
+      - "bb.edn"
       
 run-name: ${{ inputs.name }}
 
