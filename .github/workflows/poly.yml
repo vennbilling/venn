@@ -10,7 +10,7 @@ jobs:
   test:
     strategy:
       matrix:
-        version: ["java-8", "java-11", "java-17", "java-21"]
+        version: ["java-11", "java-17", "java-21"]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
