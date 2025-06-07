@@ -55,7 +55,7 @@ jobs:
             ~/.gitlibs
             ~/.deps.clj
           key: cljdeps-build-uberjar-${{ matrix.project$}}-${{ matrix.version }}-{{ hashFiles('deps.edn', 'bb.edn') }}
-          restore-keys: cljdeps-build-uberjar-${{ matrix.project$}}-${{ matrix.version }}
+          restore-keys: cljdeps-build-uberjar-${{ matrix.project$}}-${{ matrix.version }}-
 
       - name: Install babashka
         uses: turtlequeue/setup-babashka@v1.5.2
