@@ -13,10 +13,17 @@
 
 (defmacro defhandler
   "Defines a handler function that automatically applies respond-with to the result.
-   See com.vennbilling.http.core/defhandler for implementation details."
-  {:clj-kondo/lint {:lint-as {core/defhandler clojure.core/fn}}}
+
+   Usage:
+   (defhandler my-handler [request]
+     [:ok {:message \"Hello\"}])
+
+   This is equivalent to:
+   (defn my-handler [request]
+     (respond-with [:ok {:message \"Hello\"}]))"
   [name args & body]
-  `(core/defhandler ~name ~args ~@body))
+  `(defn ~name ~args
+     (core/respond-with (do ~@body))))
 
 (defn serve
   "Starts up an HTTP server with a io.undertow config and ring handler. Returns an undertow server"

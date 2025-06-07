@@ -12,17 +12,3 @@
       :bad-request (http/bad-request body)
       :not-found (http/not-found body)
       (http/bad-request body))))
-
-(defmacro defhandler
-  "Defines a handler function that automatically applies respond-with to the result.
-   
-   Usage:
-   (defhandler my-handler [request]
-     [:ok {:message \"Hello\"}])
-   
-   This is equivalent to:
-   (defn my-handler [request]
-     (respond-with [:ok {:message \"Hello\"}]))"
-  [name args & body]
-  `(defn ~name ~args
-     (respond-with (do ~@body))))
