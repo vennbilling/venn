@@ -19,6 +19,7 @@ jobs:
     strategy:
       matrix:
         version: ["java-8", "java-11", "java-17", "java-21"]
+        project: ["agent", "server"]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -31,6 +32,9 @@ jobs:
 
       - name: Set Java Version
         run: echo "VENN_JAVA_VERSION=$(echo ${{ matrix.version}} | cut -d'-' -f2)" >> $GITHUB_ENV
+              
+      - name: Set Project
+        run: echo "VENN_PROJECT=$(echo ${{ matrix.project}} | cut -d'-' -f2)" >> $GITHUB_ENV
 
       - name: Prepare java
         uses: actions/setup-java@v3
