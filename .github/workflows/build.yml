@@ -15,7 +15,7 @@ permissions:
   packages: write
 
 jobs:
-  build:
+  uberjar:
     strategy:
       matrix:
         version: ["java-8", "java-11", "java-17", "java-21"]
