@@ -14,7 +14,6 @@
 (defmacro defhandler
   "Defines a handler function that automatically applies respond-with to the result.
    See com.vennbilling.http.core/defhandler for implementation details."
-  {:clj-kondo/lint {:lint-as {core/defhandler clojure.core/fn}}}
   [name args & body]
   `(core/defhandler ~name ~args ~@body))
 
